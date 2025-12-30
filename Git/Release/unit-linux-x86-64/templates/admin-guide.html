@@ -1,0 +1,43 @@
+<div><h1 data-index="" id="Admin Guide" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Admin Guide<a href="#Admin Guide" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h1>
+<h3 data-index="" id="Editing and creating pages" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Editing and creating pages<a href="#Editing and creating pages" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h3>
+You can edit an existing page using the <img style="height: 1em" src="/static/icons/menu.svg"> ▶ <img style="height: 1em" src="/static/icons/edit_doc.svg"> at the top right of the page. If the button is missing, you lack the permissions to edit the page. 
+
+<p>To create a page use the <img style="height: 1em" src="/static/icons/menu.svg"> ▶ <img style="height: 1em" src="/static/icons/add.svg">.</p>
+<h4 data-index="" id="Editor" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Editor<a href="#Editor" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h4>
+In the editor you can set name of article and set commit name (not git, just message in history). In editor available search and replace. Preview updates automaticaly on edidor change (limit exist, so if something wrong write something and delete)
+
+<p>Editor supports HTML and Markdown</p>
+<h3 data-index="" id="History" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">History<a href="#History" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h3>
+You can delete server history via <img style="height: 1em" src="/static/icons/history.svg"> <pre style="display: inline-block">History</pre>  ▶ <img style="height: 1em" src="/static/icons/menu.svg"> ▶ <img style="height: 1em" src="/static/icons/delete_history.svg"> at the top right of the page. 
+To turn off the history press <img style="height: 1em" src="/static/icons/history.svg"> <pre style="display: inline-block">History</pre>  <img style="height: 1em" src="/static/icons/menu.svg"> ▶ <img style="height: 1em" src="/static/icons/history_off.svg"> button.
+
+<p>If the buttons are missing, you lack the permissions to edit the page. </p>
+<h3 data-index="" id="Renaming and Deleting" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Renaming and Deleting<a href="#Renaming and Deleting" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h3>
+You can rename a page using <img style="height: 1em" src="/static/icons/menu.svg"> ▶ <img style="height: 1em" src="/static/icons/edit.svg">, then you will see text field for new name
+
+<p>A page can be deleted with  <img style="height: 1em" src="/static/icons/menu.svg"> ▶ <img style="height: 1em" src="/static/icons/delete.svg"> .</p>
+<div data-callout="caution" class="callout caution" style="white-space: pre;"><div class="callout caution-title">Caution</div><p></p>This deletion can't be reverted.</div> 
+
+<h3 data-index="" id="Page name" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Page name<a href="#Page name" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h3>
+The page name can be anything that can be stored in the file system, with some sanitization: ?$.#\ and trailing slashes / will be removed.
+
+<h3 data-index="" id="Attachments" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Attachments<a href="#Attachments" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h3>
+To add attachment you need to create file in "/static" directory. 
+
+<p>Example:</p>
+<img style="height: 1em" src="/static/icons/menu.svg"> 
+
+<p>is</p>
+<p><code>&lt;img style="height: 1em" src="/static/icons/menu.svg"&gt;</code></p>
+<h3 data-index="" id="Subdirectories" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Subdirectories<a href="#Subdirectories" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h3>
+You can create a page in a subdirectory by placing the name of the subdirectory before the page name separated by a slash. For example: Subdirectory/Page. For a better overview, a subdirectory has its own Page index.
+
+<p>Subdirectories can have subdirectories. The limit is given by file system's filename's length, because UniT doesn't create new dirs: filename is path+name of article. "/" will be replaced to "($)".</p>
+<h3 data-index="" id="Server Settings" onmouseenter="this.firstElementChild.style.opacity = `1`" onmouseleave="this.firstElementChild.style.opacity = `0`">Server Settings<a href="#Server Settings" style="margin-left: 5px; opacity: 0;"><img src="/static/icons/link.svg"></a></h3>
+You can get into settings via <img style="height: 1em" src="/static/icons/settings.svg"><pre style="display: inline-block">Settings</pre>. You can set favicon, header-image, side-image, is history enabled, history limit, search limit, server name.
+
+<br>
+<br>
+<br>
+Good luck
+<br></div>

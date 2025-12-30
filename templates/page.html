@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wiki</title>
+<link rel="icon" href="/static/pageicons/favicon.png" type="image/png">
+
+
+<link rel="stylesheet" href="/static/css/additions.css">
+<link rel="stylesheet" href="/static/css/main.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-python.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-javascript.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
+<script defer src="/static/js/theme.js"></script>
+</head>
+<body>
+
+<div class="header">
+    <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; align-items: center;">
+        <button class="menu-btn" onclick="toggle()">  ☰  </button>
+        <a style="height: 100%; align-content: center;"  href="/"><img style="margin-left: 1vw; height: 55%;" src="/{{ .T_icon }}"></a>
+        <a href="/" id="service-title">{{ .Title }}</a>
+    </div>
+
+    <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; gap: 0.5vw; align-items: center;">
+
+        <div class="option-icon" id="openbtn" >
+            <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/menu.svg">
+        </div>
+
+        <a href="/-/login" class="option-icon" id="loginbtn" >
+            <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/login.svg">
+        </a>
+    </div>
+
+   <div class="side-menu" id="sideMenu">
+        <div class="menu-item" onclick="copyEventB(this,document.getElementById(`content`).innerHTML)">
+            <img class="img-invert" src="/static/icons/copy.svg">
+            <span>Copy</span>
+        </div>
+
+        <div class="menu-item" onclick="copyEventB(this,window.location.href)">
+            <img class="img-invert" src="/static/icons/copy-link.svg">
+            <span>Copy link</span>
+        </div>
+
+        <div class="menu-item" name="auth" onclick="window.location.href = `/-/edit?path=${window.location.pathname.replace(/^\/+/, '') .replace(/\/+$/, '')}`">
+            <img class="img-invert" src="/static/icons/edit_doc.svg">
+
+            <span>Edit</span>
+        </div>
+        <div class="menu-item" name="auth" onclick="renameTmpl()">
+            <img class="img-invert" src="/static/icons/edit.svg">
+
+            <span>Rename</span>
+        </div>
+
+        <div class="menu-item" name="auth" onclick="window.location.href = `/-/edit?type=a`">
+                <img class="img-invert" src="/static/icons/add.svg">
+
+            <span>Create</span>
+        </div>
+        <div class="menu-item" name="auth" onclick="sureTmpl(function () { deletePage() })">
+                <img class="img-invert" src="/static/icons/delete.svg">
+
+            <span>Delete</span>
+        </div>
+        <div class="menu-item" onclick="toggleTheme()">
+                <img class="img-invert" src="/static/icons/theme.svg">
+
+            <span>Toggle Theme</span>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="wrapper">
+    <div id="left" class="left hidden" style="display: flex; justify-content: space-between;">
+        <div>
+            <a class="menu-item" style=" margin-bottom: 1.5vh;" href="/">
+                <img class="img-invert" src="/static/icons/home.svg">
+                <span>Home</span>
+            </a>
+
+            <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/index">
+                <img class="img-invert" src="/static/icons/index.svg">
+                <span>A-Z</span>
+            </a>
+            <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/history">
+                <img class="img-invert" src="/static/icons/history.svg">
+                <span>History</span>
+            </a>
+            <a class="menu-item" style="margin-bottom: 1.5vh;" name="auth" href="/-/settings">
+                <img class="img-invert" src="/static/icons/settings.svg">
+                <span>Settings</span>
+            </a>
+
+            {{ .Buttons }}
+
+        <div>
+            <div class="search-wrap">
+                    <input id="search_input" type="text" placeholder="Search" value="">
+                </div>
+                <div style="margin: 1.5vh;" id="result">
+                    
+                </div>
+            </div>
+            <div style="display: flex;  align-items: center; flex-direction: column;">
+                <div onclick="toggleArrow()" style="cursor: pointer; display: flex; justify-content: center; width: 100%; align-items: center;">
+                    
+                    <div style="font-size: 2vh; user-select: none; margin-bottom: 1.75vh;">
+                        <img class="arrow" id="arrow" src="/static/icons/arrow.svg">
+                        On this page
+                    </div>
+                </div>
+                <div id="links-chart">
+
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+
+            <div style="width: 40%; aspect-ratio: 1/1;">
+                <img style="width: 100%; " src="/{{ .S_icon }}">
+            </div>
+
+            <a style="font-size: 1.75vh" href="/-/about">powered by UniT</a>
+
+
+        </div>
+
+    </div>
+    
+    <div class="right" id="right">
+        <div id="content">
+            {{ .Content}}
+        </div>
+    </div>
+</div>
+
+
+
+<script defer src="/static/js/page-script.js"></script>
+
+<script>
+
+let is_auth
+let authdivs = document.getElementsByName("auth")
+let login_btn = document.getElementById("loginbtn")
+
+try{
+    is_auth = {{ .IsAuth }}
+}
+catch (error){
+    is_auth = false
+}
+if (!is_auth){
+    for (el of authdivs){
+        el.style.display = `none`
+    }
+    login_btn.href = `/-/login?next=${window.location.href}`
+}
+else{
+    login_btn.firstElementChild.src = "/static/icons/logout.svg"
+    login_btn.href = `/-/logout?next=${window.location.pathname}`
+}
+if (window.location.pathname!="/"){
+    let p = decodeURI(window.location.pathname).split("/")
+    if (window.location.pathname.includes("/-/")==false&&p.length>0){
+        p=p[p.length-1]
+    }
+    else{
+        let h = document.getElementById("content").querySelector("h1")
+        if (h!==undefined){
+            p=h.innerText
+        }
+        else{
+            p="Wiki"
+        }
+    }
+    document.title = p
+}
+else if (window.location.pathname=="/"){
+    document.title = {{ .Title }}
+}
+</script>
+
+
+</body>
+</html>
