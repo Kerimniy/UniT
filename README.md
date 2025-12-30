@@ -10,7 +10,7 @@ UniT (pronounced Uni Taze, a.k.a Унитаз) is a collection of interconnected
 
 
 ### Getting Started
-Read <a href="/-/help/u-guide" >User Guide</a>, <a href="/-/help/a-guide" >Admin Guide</a> and <a href="/-/help/md-syntax" >Markdown Syntax Guide</a> to start using.
+Read <a href="https://github.com/Kerimniy/UniT/blob/main/templates/guide-u-s.md" >User Guide</a>, <a href="https://github.com/Kerimniy/UniT/blob/main/templates/guide-a-s.md" >Admin Guide</a> and <a href="https://github.com/Kerimniy/UniT/blob/main/templates/guide-md-s.md" >Markdown Syntax Guide</a> to start using.
 
 ### Contributing
 
