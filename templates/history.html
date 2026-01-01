@@ -25,11 +25,11 @@
     <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; gap: 0.5vw; align-items: center;">
 
         <div class="option-icon" id="openbtn" >
-            <img style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/menu.svg">
+            <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/menu.svg">
         </div>
 
         <a href="/-/login" class="option-icon" id="loginbtn" >
-            <img style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/login.svg">
+            <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/login.svg">
         </a>
     </div>
 
@@ -37,28 +37,28 @@
 
 
         <div class="menu-item" onclick="copyEventB(this,window.location.href)">
-            <img src="/static/icons/copy-link.svg">
+            <img class="img-invert" src="/static/icons/copy-link.svg">
             <span>Copy link</span>
         </div>
 
         <div class="menu-item" name="auth" onclick="fetch(`/-/history-delete`, {method: `GET`}).then(window.location.reload())">
-            <img src="/static/icons/delete_history.svg">
+            <img class="img-invert" src="/static/icons/delete_history.svg">
 
             <span>Clear History</span>
         </div>
 
         <div class="menu-item" name="auth" id="off_history" onclick="fetch(`/-/history-toggle`, {method: `GET`}).then(window.location.reload())">
-                <img src="/static/icons/history_off.svg">
+                <img class="img-invert" src="/static/icons/history_off.svg">
 
             <span>Off history</span>
         </div>
         <div class="menu-item" name="auth" onclick="window.location.href = `/-/edit?type=a`">
-                <img src="/static/icons/add.svg">
+                <img class="img-invert" src="/static/icons/add.svg">
 
             <span>Create</span>
         </div>
          <div class="menu-item" onclick="toggleTheme()">
-                <img src="/static/icons/theme.svg">
+                <img class="img-invert" src="/static/icons/theme.svg">
 
             <span>Toggle Theme</span>
         </div>
@@ -72,20 +72,20 @@
    <div id="left"class="left hidden" style="display: flex; justify-content: space-between;">
         <div>
             <a class="menu-item" style="margin-bottom: 1.5vh;" href="/">
-                <img src="/static/icons/home.svg">
+                <img class="img-invert" src="/static/icons/home.svg">
                 <span>Home</span>
             </a>
 
             <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/index">
-                <img src="/static/icons/index.svg">
+                <img class="img-invert" src="/static/icons/index.svg">
                 <span>A-Z</span>
             </a>
             <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/history">
-                <img src="/static/icons/history.svg">
+                <img class="img-invert" src="/static/icons/history.svg">
                 <span>History</span>
             </a>
             <a class="menu-item" style="margin-bottom: 1.5vh;" name="auth" href="/-/settings">
-                <img src="/static/icons/settings.svg">
+                <img class="img-invert" src="/static/icons/settings.svg">
                 <span>Settings</span>
             </a>
 
