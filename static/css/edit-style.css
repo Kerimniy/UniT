@@ -248,6 +248,10 @@ a:hover {
             display: auto;
         }
         @media (max-width: 750px){
+            *::-webkit-scrollbar {
+                width: 5px;
+                height: auto;
+            }
              .hideonmobile{
                 display: none;
             }
