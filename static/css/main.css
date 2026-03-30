@@ -49,7 +49,9 @@
     --filter-search-icon: invert(0.7);
     --opacity-search-icon: 0.7;
 
-    --invert-image:0
+    --invert-image:0;
+
+    --file-input:#393939
 
 }
 
@@ -104,7 +106,9 @@ body.light {
     --filter-search-icon: invert(0);
     --opacity-search-icon: 0.5;
 
-    --invert-image:1
+    --invert-image:1;
+
+    --file-input:#e9ecef
 
 }
 html { scroll-behavior: smooth;    padding-bottom: env(safe-area-inset-bottom); }
@@ -388,7 +392,7 @@ display: none;}
     border-radius: 16px 0 0 16px;   
     box-shadow: -8px 8px 30px var(--shadow-secondary);
     padding: 16px 0;
-    transform: translateX(100%);   
+    transform: translateX(130%);   
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
     overflow: hidden;

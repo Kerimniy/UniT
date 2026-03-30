@@ -52,6 +52,11 @@
 
             <span>Off history</span>
         </div>
+         <div class="menu-item" name="auth" onclick="window.location.href = `/-/load`">
+                <img class="img-invert" src="/static/icons/att.svg">
+
+            <span>Add attachment</span>
+        </div>
         <div class="menu-item" name="auth" onclick="window.location.href = `/-/edit?type=a`">
                 <img class="img-invert" src="/static/icons/add.svg">
 
@@ -100,7 +105,7 @@
             </div>
             <div style="display: flex;  align-items: center; flex-direction: column;">
                 <div onclick="toggleArrow()" style="cursor: pointer; display: flex; justify-content: center; align-items: center;">
-                    <img class="arrow" id="arrow" src="/static/icons/arrow.svg">
+                    <img  class="arrow img-invert" id="arrow" src="/static/icons/arrow.svg">
                     <p style="font-size: 2vh; user-select: none;">On this page</p>
                 </div>
                 <div id="links-chart">
@@ -112,7 +117,7 @@
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
 
             <div style="width: 40%; aspect-ratio: 1/1;">
-                <img style="width: 100%; " src="/{{ .S_icon }}">
+                <img class="img-invert" style="width: 100%; " src="/{{ .S_icon }}">
             </div>
 
             <a href="/-/about" style="font-size: 1.75vh">powered by UniT</a>

@@ -24,7 +24,7 @@
 
     <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; gap: 0.5vw; align-items: center;">
         <div class="option-icon" id="openbtn" >
-            <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/menu.svg">
+                    <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/menu.svg">
         </div>
       
         <a href="/-/login" class="option-icon" id="loginbtn" >
@@ -43,6 +43,12 @@
                 <img class="img-invert" src="/static/icons/add.svg">
 
             <span>Create</span>
+        </div>
+
+        <div class="menu-item" name="auth" onclick="window.location.href = `/-/load`">
+                <img class="img-invert" src="/static/icons/att.svg">
+
+            <span>Add attachment</span>
         </div>
 
         <div class="menu-item" onclick="toggleTheme()">
@@ -92,7 +98,7 @@
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
 
             <div style="width: 40%; aspect-ratio: 1/1;">
-                <img style="width: 100%; " src="/{{ .S_icon }}">
+                <img class="img-invert" style="width: 100%; " src="/{{ .S_icon }}">
             </div>
 
             <a href="/-/about" style="font-size: 1.75vh">powered by UniT</a>

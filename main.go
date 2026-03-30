@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -19,8 +20,8 @@ import (
 	"github.com/armon/go-radix"
 	"github.com/gorilla/securecookie"
 	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/crypto/bcrypt"
 )
-import "golang.org/x/crypto/bcrypt"
 
 var SECRET_KEY = make([]byte, 64)
 var s = securecookie.New(SECRET_KEY, nil)
@@ -109,6 +110,7 @@ var t_about = read_file_as_str("templates/about.html")
 var t_syntax = read_file_as_str("templates/syntax.html")
 var t_user_guide = read_file_as_str("templates/user-guide.html")
 var t_admin_guide = read_file_as_str("templates/admin-guide.html")
+var t_attachments = read_file_as_str("templates/attachments.html")
 
 var dict = make(map[string]any)
 var db *sql.DB
@@ -156,6 +158,8 @@ func main() {
 	if host == "" {
 		host = "127.0.0.1:6060"
 	}
+
+	fmt.Println(host)
 
 	file, f_err := os.Open("SECRET_KEY")
 	if f_err != nil {
@@ -321,6 +325,7 @@ func main() {
 	}
 
 	http.HandleFunc("/-/api/create-page", create_new_page)
+	http.HandleFunc("/-/api/add-att", add_attachment)
 	http.HandleFunc("/-/api/get-page", get_page_source)
 	http.HandleFunc("/-/api/get-index-pages", get_index_pages)
 	http.HandleFunc("/-/index", page_indexies)
@@ -328,6 +333,7 @@ func main() {
 	http.HandleFunc("/-/help/md-syntax", render_syntax)
 	http.HandleFunc("/-/help/a-guide", render_admin_guide)
 	http.HandleFunc("/-/help/u-guide", render_user_guide)
+	http.HandleFunc("/-/load", render_load_att)
 	http.HandleFunc("/-/search", search_request)
 	http.HandleFunc("/-/edit", render_edit)
 	http.HandleFunc("/-/login", render_login)
@@ -345,9 +351,41 @@ func main() {
 	http.HandleFunc("/{p...}", get_page)
 	fs := http.FileServer(http.Dir("./"))
 	http.Handle("/static/", fs)
-	fmt.Println(fmt.Sprintf("Listening on %s", host))
+	fmt.Printf("Listening on %s\n", host)
 	log.Fatal(http.ListenAndServe(host, nil))
 
+}
+
+func add_attachment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(405)
+		return
+	} else if !is_logined(r, w) {
+		http.Error(w, "Error 401", http.StatusUnauthorized)
+		return
+	} else {
+		r.ParseMultipartForm(10 << 25)
+		file, handler, err := r.FormFile("file")
+		if err != nil {
+			http.Error(w, "Error retrieving file", http.StatusInternalServerError)
+			return
+		}
+		defer file.Close()
+		dst, err := os.Create(filepath.Join("static/att/", handler.Filename))
+		if err != nil {
+			http.Error(w, "Error creating file", http.StatusInternalServerError)
+			return
+		}
+		defer dst.Close()
+		if _, err := io.Copy(dst, file); err != nil {
+			http.Error(w, "Error writing file", http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(200)
+		if history_enabled {
+			go update_history("", "New attachement", fmt.Sprint("Attached ", handler.Filename))
+		}
+	}
 }
 
 func rename(w http.ResponseWriter, r *http.Request) {
@@ -1048,6 +1086,31 @@ func render_about(w http.ResponseWriter, r *http.Request) {
 	`
 	var content = Cnt{Content: template.HTML(t_about), IsAuth: is_logined(r, w), Path: "", T_icon: t_icon_path, S_icon: s_icon_path, Title: Title, Buttons: template.HTML(btns)}
 	e := page_tmpl.Execute(w, content)
+	if e != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, e1 := fmt.Fprint(w, "500")
+		if e1 != nil {
+
+		}
+	}
+}
+
+func render_load_att(w http.ResponseWriter, r *http.Request) {
+
+	if !is_logined(r, w) {
+		http.Redirect(w, r, "/-/login", http.StatusUnauthorized)
+		return
+	}
+
+	t_attachments = read_file_as_str("templates/attachments.html")
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	var btns = ``
+
+	var content = Cnt{Content: template.HTML(t_attachments), IsAuth: is_logined(r, w), Path: "", T_icon: t_icon_path, S_icon: s_icon_path, Title: Title, Buttons: template.HTML(btns)}
+
+	e := page_tmpl.Execute(w, content)
+
 	if e != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, e1 := fmt.Fprint(w, "500")
