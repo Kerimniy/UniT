@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wiki</title>
+<title>Edit</title>
 <link rel="icon" href="/static/pageicons/favicon.png" type="image/png">
 
 <script defer src="/static/js/theme.js"></script>
@@ -176,7 +176,7 @@
 
 <div class="header">
     <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; align-items: center;">
-        <button class="menu-btn" onclick="toggle()">  ☰  </button>
+        <button style="width: auto;" class="menu-btn" onclick="toggle()">  ☰  </button>
         <a style="height: 100%; align-content: center;"  href="/"><img style="margin-left: 1vw; height: 55%;" src="/{{ .T_icon }}"></a>
         <a href="/" id="service-title">{{ .Title }}</a>
     </div>
@@ -276,7 +276,7 @@
 
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
 
-            <div style="width: 40%; aspect-ratio: 1/1;">
+            <div style="width: clamp(5rem, 65%, 12.5rem); aspect-ratio: 1/1;">
                 <img style="width: 100%; " src="/{{ .S_icon }}">
             </div>
 
@@ -334,26 +334,7 @@ else{
     login_btn.firstElementChild.src = "/static/icons/logout.svg"
     login_btn.href = `/-/logout?next=${window.location.pathname}`
 }
-if (window.location.pathname!="/"){
-    let p = decodeURI(window.location.pathname).split("/")
-    if (window.location.pathname.includes("/-/")==false&&p.length>0){
-        p=p[p.length-1]
-    }
-    else{
-        
-        let h = document.getElementById("content").querySelector("h1")
-        if (h!==undefined && h!==null){
-            p=h.innerText
-        }
-        else{
-            p="Wiki"
-        }
-    }
-    document.title = p
-}
-else if (window.location.pathname=="/"){
-    document.title = {{ .Title }}
-}
+
 </script>
 
 <script defer>
