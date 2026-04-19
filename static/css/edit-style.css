@@ -49,8 +49,8 @@ body.light {
     --bg-codemirror: #ffffff;
     --bg-gutters: #f1f1f1;
     --bg-input: #ffffff;
-    --bg-button: #007bff;
-    --bg-button-hover: #0056b3;
+    --bg-button: #54a4fa;
+    --bg-button-hover: #2f91fa;
     --bg-save: #28a745;
     --bg-save-hover: #218838;
     --bg-selected: rgba(0,123,255,0.1);
@@ -155,7 +155,7 @@ a:hover {
             gap: 12px;
             align-items: center;
         }
-        
+        /*
         input[type="text"] {
             border: 1px solid var(--border-input);
             background: var(--bg-input);
@@ -166,20 +166,36 @@ a:hover {
             font-size: 13px;
             
         }
+        */
+        
+        input[type="text"] {
+           width: 100%;
+            padding: 0.55rem;
+            background-color: var(--bg-input);
+            border: 0.25vh solid var(--border-secondary);
+            border-radius: 2vh;
+            color: var(--text-search-input);
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box;
+            
+        }
         
         button {
-            background: var(--bg-button);
+            background-color: var(--bg-button);
             color: var(--text-button);
             border: none;
-            border-radius: 4px;
+            border-radius: 1rem;
             cursor: pointer;
             font-size: 13px;
-             width: 85%;
-            padding: 0.5vw;
+            width: calc(100% - 1rem);
+            padding: 0.5rem;
+
         }
         
         button:hover {
             background: var(--bg-button-hover);
+             transition: background-color 0.2s ease;
         }
         
         button.save {
@@ -205,16 +221,15 @@ a:hover {
             flex-direction: column;
             align-items: center;         
             justify-content: flex-start;
-            width: 20%;
+            width: 95%;
             min-width: 120px;
             gap: 12px;                  
             height: 100%;
             background: var(--bg-sidebar);
-            border-left: var(--border-generic) solid 0.25vw;
         }
     
     
-        html,body,#editor { height:100%; margin:0; background:var(--bg-editor); }
+        html,body,#editor {  margin:0; background:var(--bg-editor); }
         .CodeMirror-scroll { scrollbar-color: var(--scrollbar-cm-color); }
         .CodeMirror-scroll::-webkit-scrollbar { width:12px; height:12px; }
         .CodeMirror-scroll::-webkit-scrollbar-track { background:var(--scrollbar-cm-track); }
@@ -232,13 +247,13 @@ a:hover {
 
             padding: 2vh;
             overflow-x:auto;
-            width: 30%; border-left: var(--border-generic) solid 0.25vw;
             background: var(--bg-preview)
             
             
         }
         .editor{
-            width: 50%;
+            width: 100%;
+            height: 100%;
             overflow-x: hidden;
         }
         #submit2{
@@ -260,9 +275,7 @@ a:hover {
             }
             .preview
             {
-                border-top: var(--border-generic) 0.75vh solid;
                 width: 100%; 
-                height: 40%;
             }
             .editor{
                 
@@ -270,9 +283,11 @@ a:hover {
 
                 height: 60%;
             }
+            /*
             #sidebar{
                 display: none;
             }
+            */
             #submit2{
                 display: block;
             }
@@ -284,8 +299,49 @@ a:hover {
         }
 
 
-
+#editor-top{
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    width: calc(100% - 2rem); 
+    gap:1rem; 
+    padding: 1rem; 
+    justify-content: space-between;
+}
+#filename{
+    margin: 1vw; width: 45%;
+}
+#commit{
+    margin: 1vw; width: 35%;
+}
  
+#toggle-preview{
+    width: 20%; 
+    height: 2.5rem;
+}
+ 
+@media (max-width: 550px){
+    #editor-top{
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        width: calc(100% - 2rem); 
+        gap:1rem; 
+        padding: 1rem; 
+        justify-content: center;
+    }
+    #filename{
+        margin: 0.5rem; width: 90%;
+    }
+    #commit{
+        margin: 0.5rem; width: 90%;
+    }
+    
+    #toggle-preview{
+        width: 90%; 
+        height: 2.5rem;
+    }
+}
     
 .CodeMirror {
   background: var(--bg-codemirror) !important;

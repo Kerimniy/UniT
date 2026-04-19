@@ -1,0 +1,68 @@
+:root {
+    --bg-card: #24232a;
+    --border-card: #3f3e47;
+    --shadow-card: rgba(0,0,0,0.35);
+    --text-card-title: #fff;
+    --border-hr: #45434f;
+    --link-card: #d7b8ff;
+    --bg-card-hover: #2d2c34;
+}
+
+body.light {
+    --bg-card: #ffffff;
+    --border-card: #dee2e6;
+    --shadow-card: rgba(0,0,0,0.1);
+    --text-card-title: #212529;
+    --border-hr: #ced4da;
+    --link-card: #007bff;
+    --bg-card-hover: #f8f9fa;
+}
+
+.index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 25%));
+    gap: 20px;
+    padding: 20px;
+}
+
+.index-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 15px 18px;
+    box-shadow: 0 0 8px var(--shadow-card);
+    transition: transform 0.15s ease, background 0.2s;
+}
+
+.index-card > p {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: var(--text-card-title);
+    font-weight: bold;
+}
+
+.index-card hr {
+    border: none;
+    height: 1px;
+    background: var(--border-hr);
+    margin: 10px 0;
+}
+
+.index-card a {
+    display: block;
+    margin: 6px 0;
+    color: var(--link-card);
+    word-break: break-word;
+}
+
+.index-card:hover {
+    transform: translateY(-1px);
+    background: var(--bg-card-hover);
+}
+
+@media(max-width: 350px) {
+
+    .index-grid{
+        grid-template-columns: auto;
+    }
+}

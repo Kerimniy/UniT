@@ -1,9 +1,9 @@
-  
+const togglePreview = document.getElementById("toggle-preview")
 
 
-        const preview =document.getElementById("preview")
+const preview =document.getElementById("preview")
 
-        const editor = CodeMirror(document.getElementById("editor"), {
+const editor = CodeMirror(document.getElementById("editor"), {
             theme: "monokai",
             lineNumbers: true,
             lineWrapping: false,
@@ -18,9 +18,23 @@
   
             },
             mode: "htmlmixed"
-        });
+});
 
 
+togglePreview.addEventListener("click", ()=>{
+    if (togglePreview.innerText === "Preview"){
+        togglePreview.innerHTML = "Code"
+
+        document.getElementById("container").style.display="none"
+        preview.style.display="block"
+        updatePreview()
+    }
+    else{
+        togglePreview.innerHTML = "Preview"    
+        document.getElementById("container").style.display="flex"
+        preview.style.display="none"    
+    }
+})
 
 
 
@@ -44,7 +58,6 @@ document.addEventListener("keydown", (e) => {
     editor.execCommand("goLineUp");
   }
 });
-
         editor.focus();
 
         const searchInput  = document.getElementById('search');
@@ -54,7 +67,7 @@ document.addEventListener("keydown", (e) => {
 
         const filename = document.getElementById('filename');
         const commit = document.getElementById('commit');
-        const title = document.getElementById('title');
+       // const title = document.getElementById('title');
 
         const urlParams = new URLSearchParams(window.location.search);
 
@@ -75,11 +88,12 @@ document.addEventListener("keydown", (e) => {
 
         filename.value = path;
         if (type=="a"){
-            title.innerText = "Create new article";
+            //title.innerText = "Create new article";
+            
             document.title = "Create new article"
         }
         else {
-            title.innerText = "Edit article";
+            //title.innerText = "Edit article";
             
         }
 
@@ -161,7 +175,7 @@ document.addEventListener("keydown", (e) => {
             
         });
 
-
+        /*
         let raf;
         let t = performance.now()
         editor.on("change", () => {
@@ -174,6 +188,7 @@ document.addEventListener("keydown", (e) => {
 
           
         })
+        */
         
         marked.setOptions({ mangle: false, headerIds: false });
 
@@ -220,6 +235,21 @@ const cLikeLanguages = {
             const index = temp.querySelectorAll('*[data-index]')
             const codes = temp.querySelectorAll('code')
             const tables = temp.querySelectorAll('table')
+
+            const images = temp.querySelectorAll('img')
+
+            let j=0
+            for (const image of images){
+                
+                image.dataset.att=`${j}`
+                image.addEventListener("click",()=>{
+                    open_image.classList.remove("hide")
+                    let url=image.src
+                    open_image.firstElementChild.style.backgroundImage=`url(${url})`
+                })
+                j++
+            }
+
 
             const blockquotes = temp.querySelectorAll('blockquote');
             for (const table of tables) {
@@ -356,15 +386,16 @@ const cLikeLanguages = {
         }
 
         function submit(){
+            updatePreview()
 
             let res = {"commit":commit.value,"type": type, "filename": filename.value, "md": editor.getValue(), "html": preview.innerHTML}
             fetch(`/-/api/create-page`, {method: 'POST',headers: {'Content-Type': 'application/json'},  body: JSON.stringify(res)})
                 .then(response => {
                     if (response.ok) {
-                        console.log("200")
+                        
                     }
                     else{
-                        console.log("400")
+                        showToast(`Error (${response.status})`)
                     }
 
                 })
@@ -382,8 +413,8 @@ const cLikeLanguages = {
                 updatePreview()
             })
         }
-updatePreview();
-loadMd()
+        updatePreview();
+        loadMd()
 
         function copyEvent(_this){
                 navigator.clipboard.writeText(_this.dataset.text);
@@ -391,4 +422,37 @@ loadMd()
                 setTimeout(()=>{_this.classList.toggle("copied")}, 3000) 
         }
     
+
+        function showToast(message = "Login failed", duration = 500000) {
+            const toast = document.createElement("div");
+            toast.classList.add("toast");
+            toast.innerHTML = `
+                <span>${message}</span>
+                <span class="toast-close">&times;</span>
+            `;
+
+            document.getElementById("toast-container").appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add("show");
+            }, 100);
+
+            const autoHide = setTimeout(() => {
+                hideToast(toast);
+            }, duration);
+
+            toast.querySelector(".toast-close").addEventListener("click", () => {
+                clearTimeout(autoHide); 
+                hideToast(toast);
+            });
+        }
+
+        function hideToast(toast) {
+            toast.classList.remove("show");
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.parentElement.removeChild(toast);
+                }
+            }, 400);
+        }
 

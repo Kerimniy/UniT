@@ -1,0 +1,116 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings</title>
+
+<link rel="stylesheet" href="/static/css/settings-style.css">
+<link rel="icon" href="/static/pageicons/favicon.png" type="image/png">
+<script defer src="/static/js/theme.js"></script>
+
+
+</head>
+
+<body>
+  <div class="main">
+    <p class="sign" align="center">Settings</p>
+    <div class="form1">
+      <div class="file-wrapper">
+        <input id="favicon" type="file" accept=".PNG">
+        <label for="favicon" class="file-label">
+            Select favicon
+        </label>
+        <span class="file-name">No file</span>
+      </div>
+     <div class="file-wrapper">
+        <input id="image1" type="file" accept="image/*">
+        <label for="image1" class="file-label">
+            Select header-image
+        </label>
+        <span class="file-name">No file</span>
+      </div>
+      <div class="file-wrapper">
+        <input id="image2" type="file" accept="image/*">
+        <label for="image2" class="file-label">
+            Select side-image
+        </label>
+        <span class="file-name">No file</span>
+      </div>
+      <input id="history_limit" class="un" type="number" value="{{ .HistoryLimit }}" placeholder="History limit">
+      <input id="search_limit" class="un" type="number" value="{{ .SearchLimit }}" placeholder="Search limit">
+      
+      <div class="toggle-wrapper">
+        <label style="margin: 1vh;">
+            <input type="checkbox" id="history_enabled" class="checkbox" checked="{{.IsEnabled}}">
+            <div class="togglebuttonBg">
+            <div class="togglebuttonSl"></div>
+            </div>
+        </label>
+        <p>Enable history</p>
+    </div>
+
+
+      <input id="text" class="un" type="text" value="{{ .Title }}" placeholder="Text Field">
+      <button class="submit" onclick="postSettings()" align="center">Submit</button>
+    </div>
+  </div>
+</body>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  let next = urlParams.get("next");
+  if (next === null || next === undefined) {
+    next = "";
+  }
+
+  function postSettings() {
+    let formData = new FormData();
+    if (document.getElementById('favicon').files.length>0){
+    formData.append('favicon', document.getElementById('favicon').files[0])}
+    if (document.getElementById('image1').files.length>0){
+    formData.append('image1', document.getElementById('image1').files[0])};
+    if (document.getElementById('image2').files.length>0){
+    formData.append('image2', document.getElementById('image2').files[0])};
+    formData.append('history_limit', document.getElementById('history_limit').value);
+    formData.append('search_limit', document.getElementById('search_limit').value);
+    formData.append('history_enabled', document.getElementById('history_enabled').checked);
+    formData.append('text', document.getElementById('text').value);
+
+    fetch("/-/api/settings", {
+      method: "POST",
+      body: formData,
+    })
+    .then(function(response) {
+      if (response.ok) {
+        window.location.href = "/"
+
+
+      }
+    });
+  }
+</script>
+<script>
+document.getElementById('favicon').addEventListener('change', function () {
+    const name = this.files.length
+        ? this.files[0].name
+        : 'No file';
+
+    this.nextElementSibling.nextElementSibling.textContent = name;
+});
+document.getElementById('image1').addEventListener('change', function () {
+    const name = this.files.length
+        ? this.files[0].name
+        : 'No file';
+
+    this.nextElementSibling.nextElementSibling.textContent = name;
+});
+document.getElementById('image2').addEventListener('change', function () {
+    const name = this.files.length
+        ? this.files[0].name
+        : 'No file';
+
+    this.nextElementSibling.nextElementSibling.textContent = name;
+});
+</script>
+
+</html>

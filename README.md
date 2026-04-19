@@ -1,8 +1,5 @@
 UniT (pronounced Uni Taze, a.k.a Унитаз) is a collection of interconnected entries, called a wiki. HTML and Markdown are used as Markup languages.
 
-### v0.1.1 New Feature
-- You can upload attachments. This mean that you don't have to have access to file system of your PC/VPS/PaaS
-
 ### Features
 
 - Minimalistic interface with dark-mode support

@@ -6,6 +6,20 @@ let search_result = document.getElementById("result")
 
 let right = document.getElementById("right")
 
+let open_image =  document.getElementById("open-image")
+
+open_image.lastElementChild.addEventListener("click",()=>{
+     open_image.classList.add("hide")
+})
+
+let images = document.querySelectorAll('img[data-att]')
+for (let image of images){
+    image.addEventListener("click",()=>{
+        open_image.classList.remove("hide")
+        let url=image.src
+        open_image.firstElementChild.style.backgroundImage=`url(${url})`
+    })
+}
 
 
 function toggleArrow() {
@@ -52,9 +66,16 @@ for (let e of headers) {
     i++
 }
 
-ranges.push(right.scrollHeight)
-if (i<1){
-    links.parentElement.remove()
+try{
+
+    ranges.push(right.scrollHeight)
+    if (i<1){
+        links.parentElement.remove()
+    }
+
+}
+catch(error){
+
 }
 
 right.addEventListener("scroll", (e)=>{
@@ -82,42 +103,48 @@ function highlightIndex(){
     }
 }
 
+try{
 
-search_input.addEventListener('keyup', function(event) {
-  if (event.code=="Enter"){
-    fetch(`/-/search?q=${search_input.value}`,{method:"GET"})
-    .then(function(response){
-        return response.json();
-    })
-    .then(function(data){
-        search_result.innerHTML = ""
-        let c = true
-        for (key in data){
-            
-            let el = createElementFromHTML(`<div onclick="this.lastElementChild.click()" class="search-result">
-                        <a target="_blank"></a>
-                    </div>`
-                 )
-            if (!c){
-                el.style.filter = "brightness(115%)"   
+    search_input.addEventListener('keyup', function(event) {
+    if (event.code=="Enter"){
+        fetch(`/-/search?q=${search_input.value}`,{method:"GET"})
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(data){
+            search_result.innerHTML = ""
+            let c = true
+            for (key in data){
+                
+                let el = createElementFromHTML(`<div onclick="this.lastElementChild.click()" class="search-result">
+                            <a target="_blank"></a>
+                        </div>`
+                    )
+                if (!c){
+                    el.style.filter = "brightness(115%)"   
+                }
+                if (key.includes(".")){
+                    let temp = key.slice(0,key.length-5)
+                    el.lastElementChild.innerText = temp
+                    el.lastElementChild.href = `/p/${data[key].slice(0,key.length-5)}`
+                }
+                else{
+                    let temp = `\x01${data[key].split("/").join("/\x01")}/`
+                    el.lastElementChild.innerText = key+"/"
+                    el.lastElementChild.href = `/-/index?p=${temp}`
+                }
+                search_result.appendChild(el)
+                c=!c
             }
-            if (key.includes(".")){
-                let temp = key.slice(0,key.length-5)
-                el.lastElementChild.innerText = temp
-                el.lastElementChild.href = `/p/${data[key].slice(0,key.length-5)}`
-            }
-            else{
-                let temp = `\x01${data[key].split("/").join("/\x01")}/`
-                el.lastElementChild.innerText = key+"/"
-                el.lastElementChild.href = `/-/index?p=${temp}`
-            }
-            search_result.appendChild(el)
-            c=!c
-        }
-    })
+        })
+        
+    }
+    });
+
+}
+catch(error){
     
-  }
-});
+}
 
 document.addEventListener('keydown', function(event) {
   if (document.getElementById("rename")==undefined && (event.code=="Slash" || event.code=="NumpadDivide" || event.code == "Backslash" || event.code=="IntlBackslash")){

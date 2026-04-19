@@ -19,11 +19,11 @@
 
 body.light {
     --bg-body: #f4f9fb;
-    --bg-main: #c0c0c0;
-    --bg-input: #cbcbcb;
+    --bg-main: #ffffff;
+    --bg-input: #e7e7e7;
     --bg-toggle: #e9ecef;
     --bg-toggle-sl: #ced4da;
-    --bg-gradient: #cbcbcb;
+    --bg-gradient: #ececec;
 
     --text-primary: #212529;
     --text-submit: #212529;

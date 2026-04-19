@@ -149,6 +149,13 @@ func getSignedCookie(r *http.Request, w http.ResponseWriter) string {
 	return "none"
 }
 
+func test(w http.ResponseWriter, r *http.Request) {
+	var t = template.Must(template.ParseFiles("templates/TEST.html"))
+
+	t.Execute(w, nil)
+
+}
+
 func main() {
 
 	var host string
@@ -348,6 +355,7 @@ func main() {
 	http.HandleFunc("/-/delete-page", delete_page)
 	http.HandleFunc("/-/settings", render_settings)
 	http.HandleFunc("/-/api/settings", settings)
+	http.HandleFunc("/-/test", test)
 	http.HandleFunc("/{p...}", get_page)
 	fs := http.FileServer(http.Dir("./"))
 	http.Handle("/static/", fs)
@@ -596,7 +604,9 @@ func render_edit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/-/login", http.StatusUnauthorized)
 		return
 	}
-	e := edit_tmpl.Execute(w, nil)
+	var content = Cnt{IsAuth: is_logined(r, w), T_icon: t_icon_path, S_icon: s_icon_path, Title: Title}
+
+	e := edit_tmpl.Execute(w, content)
 	if e != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, e1 := fmt.Fprint(w, "500")
@@ -1009,6 +1019,10 @@ func get_html_file_from_storage(p string) string {
 	}
 
 	templates_lock.Lock()
+	if len(templates_cache) > 30 {
+		templates_cache = make(map[string]string)
+	}
+
 	templates_cache[raw] = tmpl
 	templates_lock.Unlock()
 	return tmpl
