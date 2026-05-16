@@ -228,4 +228,4 @@ instead of
 
 <h2 data-index>Remark</h2>
 
-There's actually a lot more to Markdown than this. See the official <a href="http://daringfireball.net/projects/markdown/basics">introduction</a> and <a href="http://daringfireball.net/projects/markdown/syntax">syntax</a> for more information. Please Note: An Otter Wiki is not using the official implementation. This might lead to small differences in the little things.
+There's actually a lot more to Markdown than this. See the official <a href="http://daringfireball.net/projects/markdown/basics">introduction</a> and <a href="http://daringfireball.net/projects/markdown/syntax">syntax</a> for more information.
