@@ -46,6 +46,14 @@ function toggle() {
     document.cookie = `bar=${left.classList.length<2}; max-age=2592000"; Path=/`;
 
 }
+
+document.querySelector(".right").addEventListener("click",()=>{
+    if (left.classList.contains("hidden")===false && window.matchMedia('(max-width: 768px)').matches){
+        document.cookie = `bar=false; max-age=2592000"; Path=/`;
+        left.classList.add("hidden")
+    }
+})
+
 if (getCookie("bar")!="false"){
 
     toggle()

@@ -13,8 +13,8 @@
 
     --link-color: #E1BEE7;
 
-    --border-input: rgba(0,0,0,0.02);
-    --border-input-focus: rgba(0,0,0,0.18);
+    --border-input: rgba(0, 0, 0, 0.02);
+    --border-input-focus: rgba(0, 0, 0, 0.18);
     --border-toast: #f5c6cb;
 
     --shadow-main: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
@@ -22,7 +22,7 @@
     --shadow-toast: 0 4px 12px rgba(0, 0, 0, 0.15);
     --shadow-forgot: 0px 0px 3px rgba(117, 117, 117, 0.12);
     --shadow-link: 0px 0px 3px rgba(117, 117, 117, 0.12);
-    --shadow-header: rgba(0,0,0,0.5);
+    --shadow-header: rgba(0, 0, 0, 0.5);
 }
 
 body.light {
@@ -40,7 +40,7 @@ body.light {
 
     --link-color: #007bff;
 
-    --border-input: rgba(0,0,0,0.1);
+    --border-input: rgba(0, 0, 0, 0.1);
     --border-input-focus: #80bdff;
     --border-toast: #f5c6cb;
 
@@ -49,11 +49,11 @@ body.light {
     --shadow-toast: 0 4px 12px rgba(0, 0, 0, 0.1);
     --shadow-forgot: 0px 0px 3px rgba(0, 0, 0, 0.05);
     --shadow-link: 0px 0px 3px rgba(0, 0, 0, 0.05);
-    --shadow-header: rgba(0,0,0,0.1);
+    --shadow-header: rgba(0, 0, 0, 0.1);
 }
 
-    
-    body {
+
+body {
     background-color: var(--bg-body);
     font-family: 'Ubuntu', sans-serif;
 }
@@ -76,23 +76,23 @@ body.light {
 }
 
 .un {
-width: 75%;
-color: var(--text-input);
-font-weight: 700;
-font-size: 14px;
-letter-spacing: 1px;
-background: var(--bg-input);
-padding: 10px 20px;
-border: none;
-border-radius: 20px;
-box-sizing: border-box;
-border: 2px solid var(--border-input);
-text-align: center;
+    width: 75%;
+    color: var(--text-input);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    background: var(--bg-input);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    box-sizing: border-box;
+    border: 2px solid var(--border-input);
+    text-align: center;
 
     margin-bottom: 1.5vh;
 }
 
-.form1{
+.form1 {
     padding-top: 2vh;
     display: flex;
     flex-wrap: wrap !important;
@@ -101,13 +101,14 @@ text-align: center;
 }
 
 
-.un:focus, .pass:focus {
+.un:focus,
+.pass:focus {
     border: 2px solid var(--border-input-focus) !important;
-    
+
 }
 
 .submit {
-  cursor: pointer;
+    cursor: pointer;
     border-radius: 5em;
     color: var(--text-submit);
     background: var(--bg-submit);
@@ -136,11 +137,11 @@ a {
 
 @media (max-width: 600px) {
     .main {
-         width: 80vw;
-    height: 35vh;
+        width: 80vw;
+        height: 35vh;
     }
-    
-  }
+
+}
 
 
 #toast-container {
@@ -150,21 +151,21 @@ a {
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 10px; 
+    gap: 10px;
 }
 
 .toast {
     min-width: 300px;
     max-width: 400px;
-    background-color: var(--bg-toast);   
-    color: var(--text-toast);               
+    background-color: var(--bg-toast);
+    color: var(--text-toast);
     border: 1px solid var(--border-toast);
     border-radius: 8px;
     padding: 16px;
     box-shadow: var(--shadow-toast);
-    opacity: 0;                   
-    transform: translateX(100%);  
-    transition: all 0.4s ease;      
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.4s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -172,7 +173,7 @@ a {
 
 .toast.show {
     opacity: 1;
-    transform: translateX(0);       
+    transform: translateX(0);
 }
 
 .toast-close {

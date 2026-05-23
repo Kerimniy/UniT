@@ -159,7 +159,6 @@ func test(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	var host string
-
 	host = read_file_as_str("HOST")
 
 	if host == "" {

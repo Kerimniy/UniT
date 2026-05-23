@@ -1,7 +1,7 @@
 :root {
     --bg-card: #24232a;
     --border-card: #3f3e47;
-    --shadow-card: rgba(0,0,0,0.35);
+    --shadow-card: rgba(0, 0, 0, 0.35);
     --text-card-title: #fff;
     --border-hr: #45434f;
     --link-card: #d7b8ff;
@@ -11,7 +11,7 @@
 body.light {
     --bg-card: #ffffff;
     --border-card: #dee2e6;
-    --shadow-card: rgba(0,0,0,0.1);
+    --shadow-card: rgba(0, 0, 0, 0.1);
     --text-card-title: #212529;
     --border-hr: #ced4da;
     --link-card: #007bff;
@@ -34,7 +34,7 @@ body.light {
     transition: transform 0.15s ease, background 0.2s;
 }
 
-.index-card > p {
+.index-card>p {
     margin: 0 0 8px 0;
     font-size: 20px;
     color: var(--text-card-title);
@@ -62,7 +62,7 @@ body.light {
 
 @media(max-width: 350px) {
 
-    .index-grid{
+    .index-grid {
         grid-template-columns: auto;
     }
 }

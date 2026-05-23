@@ -1,351 +1,360 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edit</title>
-<link rel="icon" href="/static/pageicons/favicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+    <link rel="icon" href="/static/pageicons/favicon.png" type="image/png">
 
-<script defer src="/static/js/theme.js"></script>
+    <script defer src="/static/js/theme.js"></script>
 
 
-<style>
-		
+    <style>
+        @property --angle {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
 
-	
+        @property --angle2 {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
 
-		@property --angle {
-		syntax: "<angle>";
-		inherits: false;
-		initial-value: 0deg;
-		}
-		@property --angle2 {
-		syntax: "<angle>";
-		inherits: false;
-		initial-value: 0deg;
-		}
-		@property --hue {
-		syntax: "<angle>";
-		inherits: false;
-		initial-value: 0deg;
-		}
-		
-		.splash{
+        @property --hue {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        .splash {
             z-index: 100;
-			height: 100vh;
-			width: 100vw;
+            height: 100vh;
+            width: 100vw;
 
-			position: fixed;
-			top:0;
-			left:0;
-			background-color: var(--bg-primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--bg-primary);
 
-			display: flex;
+            display: flex;
 
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		}
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-		.circle-gradient {
-		
+        .circle-gradient {
+
             z-index: 50;
-			width: 6rem;          
-			height: 6rem;
-			border-radius: 50%;    
-			background: #eeeeee00;  
-			position: relative;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			}
+            width: 6rem;
+            height: 6rem;
+            border-radius: 50%;
+            background: #eeeeee00;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-		.circle-gradient::before {
+        .circle-gradient::before {
             z-index: 50;
-			content: '';
-			position: absolute;
-			inset: -20px;         
-			padding: 1.5rem;          
-			border-radius: 50%;            
-			background: conic-gradient(
-				#00ffcc00 var(--angle2),
-				var(--text-primary) 0deg,	
-				hsl(var(--hue),100%,20%) var(--angle),
-				#00ffcc00 0deg,
-				#00ffcc00
-		
-				
-			);
-			z-index: -1;
-			
-			mask: linear-gradient(#ffffff 0 0) content-box, 
-					linear-gradient(#fff 0 0);
-			mask-composite: exclude;
+            content: '';
+            position: absolute;
+            inset: -20px;
+            padding: 1.5rem;
+            border-radius: 50%;
+            background: conic-gradient(#00ffcc00 var(--angle2),
+                    var(--text-primary) 0deg,
+                    hsl(var(--hue), 100%, 20%) var(--angle),
+                    #00ffcc00 0deg,
+                    #00ffcc00);
+            z-index: -1;
+
+            mask: linear-gradient(#ffffff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask-composite: exclude;
 
 
-			animation: rotate 0.9s infinite ease-in-out;
-			}
+            animation: rotate 0.9s infinite ease-in-out;
+        }
 
-			
 
-			@keyframes rotate {
-				0% {
-					--angle:0deg;
-					--angle2:0deg;
 
-					--hue: 200deg
-				}
-				50% {
-					--angle:360deg;
-					--angle2:0deg;
-				}
-				100% {
-					--angle2:360deg;
-					--angle:360deg;
+        @keyframes rotate {
+            0% {
+                --angle: 0deg;
+                --angle2: 0deg;
 
-					--hue:300deg;
-				}
+                --hue: 200deg
             }
-		
 
-</style>
+            50% {
+                --angle: 360deg;
+                --angle2: 0deg;
+            }
 
+            100% {
+                --angle2: 360deg;
+                --angle: 360deg;
 
-
-<link rel="stylesheet" href="/static/css/additions.css">
-<link rel="stylesheet" href="/static/css/main.css">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-python.min.js"></script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-rust.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-go.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-javascript.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
+                --hue: 300deg;
+            }
+        }
+    </style>
 
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+
+    <link rel="stylesheet" href="/static/css/additions.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-python.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-javascript.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/monokai.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/markdown/markdown.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/search/searchcursor.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/selection/active-line.min.js"></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/xml/xml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/htmlmixed/htmlmixed.min.js"></script>
-    
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/keymap/sublime.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/keymap/sublime.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-python.min.js"></script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-rust.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-go.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-javascript.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
 
-   <link rel="stylesheet" href="/static/css/additions.css">
-   <link rel="stylesheet" href="/static/css/edit-style.css">
-  <script defer src="/static/js/edit-script.js"></script>
+    <link rel="stylesheet" href="/static/css/additions.css">
+    <link rel="stylesheet" href="/static/css/edit-style.css">
+    <script defer src="/static/js/edit-script.js"></script>
 
 
 </head>
+
 <body>
 
-<div id="toast-container"></div>
+    <div id="toast-container"></div>
 
 
-<div class="splash">
-	<div class="circle-gradient"></div>
-</div>
-
-<div class="open-image hide" id="open-image">
-    <div style="z-index: 2;">
-    </div> 
-    <div></div>   
-</div>
-
-<div class="header">
-    <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; align-items: center;">
-        <button style="width: auto;" class="menu-btn" onclick="toggle()">  ☰  </button>
-        <a style="height: 100%; align-content: center;"  href="/"><img style="margin-left: 1vw; height: 55%;" src="/{{ .T_icon }}"></a>
-        <a href="/" id="service-title">{{ .Title }}</a>
+    <div class="splash">
+        <div class="circle-gradient"></div>
     </div>
 
-    <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; gap: 0.5vw; align-items: center;">
-
-        <div class="option-icon" id="openbtn" >
-            <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/menu.svg">
+    <div class="open-image hide" id="open-image">
+        <div style="z-index: 2;">
         </div>
-
-        <a href="/-/login" class="option-icon" id="loginbtn" >
-            <img class="img-invert" style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);" src="/static/icons/login.svg">
-        </a>
+        <div></div>
     </div>
 
-   <div class="side-menu" id="sideMenu">
-        <div class="menu-item" onclick="copyEventB(this,document.getElementById(`content`).innerHTML)">
-            <img class="img-invert" src="/static/icons/copy.svg">
-            <span>Copy</span>
+    <div class="header">
+        <div style="height: 100%; display: flex; flex-direction: row; justify-content: left; align-items: center;">
+            <button style="width: auto;" class="menu-btn" onclick="toggle()">  ☰  </button>
+            <a style="height: 100%;display: flex;align-items: center; justify-content: center;"  href="/"><img style="padding: 0.5rem; height: 55%;" src="/{{ .T_icon }}"></a>
+
+            <a href="/" id="service-title">{{ .Title }}</a>
         </div>
 
-        <div class="menu-item" onclick="copyEventB(this,window.location.href)">
-            <img class="img-invert" src="/static/icons/copy-link.svg">
-            <span>Copy link</span>
+        <div
+            style="height: 100%; display: flex; flex-direction: row; justify-content: left; gap: 0.5vw; align-items: center;">
+
+            <div class="option-icon" id="openbtn">
+                <img class="img-invert"
+                    style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);"
+                    src="/static/icons/menu.svg">
+            </div>
+
+            <a href="/-/login" class="option-icon" id="loginbtn">
+                <img class="img-invert"
+                    style="height: 80%; position: relative; top: 50%; left: 50%; transform: translate(-50%,-50%);"
+                    src="/static/icons/login.svg">
+            </a>
         </div>
 
-        <div class="menu-item" name="auth" onclick="window.location.href = `/-/edit?path=${window.location.pathname.replace(/^\/+/, '') .replace(/\/+$/, '')}`">
-            <img class="img-invert" src="/static/icons/edit_doc.svg">
+        <div class="side-menu" id="sideMenu">
+            <div class="menu-item" onclick="copyEventB(this,document.getElementById(`content`).innerHTML)">
+                <img class="img-invert" src="/static/icons/copy.svg">
+                <span>Copy</span>
+            </div>
 
-            <span>Edit</span>
-        </div>
-        <div class="menu-item" name="auth" onclick="renameTmpl()">
-            <img class="img-invert" src="/static/icons/edit.svg">
+            <div class="menu-item" onclick="copyEventB(this,window.location.href)">
+                <img class="img-invert" src="/static/icons/copy-link.svg">
+                <span>Copy link</span>
+            </div>
 
-            <span>Rename</span>
-        </div>
+            <div class="menu-item" name="auth"
+                onclick="window.location.href = `/-/edit?path=${window.location.pathname.replace(/^\/+/, '') .replace(/\/+$/, '')}`">
+                <img class="img-invert" src="/static/icons/edit_doc.svg">
 
-        <div class="menu-item" name="auth" onclick="window.location.href = `/-/edit?type=a`">
+                <span>Edit</span>
+            </div>
+            <div class="menu-item" name="auth" onclick="renameTmpl()">
+                <img class="img-invert" src="/static/icons/edit.svg">
+
+                <span>Rename</span>
+            </div>
+
+            <div class="menu-item" name="auth" onclick="window.location.href = `/-/edit?type=a`">
                 <img class="img-invert" src="/static/icons/add.svg">
 
-            <span>Create</span>
-        </div>
-        <div class="menu-item" name="auth" onclick="sureTmpl(function () { deletePage() })">
+                <span>Create</span>
+            </div>
+            <div class="menu-item" name="auth" onclick="sureTmpl(function () { deletePage() })">
                 <img class="img-invert" src="/static/icons/delete.svg">
 
-            <span>Delete</span>
-        </div>
-         <div class="menu-item" name="auth" onclick="window.location.href = `/-/load`">
+                <span>Delete</span>
+            </div>
+            <div class="menu-item" name="auth" onclick="window.location.href = `/-/load`">
                 <img class="img-invert" src="/static/icons/att.svg">
 
-            <span>Add attachment</span>
-        </div>
-        <div class="menu-item" onclick="toggleTheme()">
+                <span>Add attachment</span>
+            </div>
+            <div class="menu-item" onclick="toggleTheme()">
                 <img class="img-invert" src="/static/icons/theme.svg">
 
-            <span>Toggle Theme</span>
+                <span>Toggle Theme</span>
+            </div>
+
         </div>
 
     </div>
 
-</div>
+    <div class="wrapper">
+        <div id="left" class="left hidden" style="display: flex; justify-content: space-between;">
+            <div>
+                <a class="menu-item" style=" margin-bottom: 1.5vh;" href="/">
+                    <img class="img-invert" src="/static/icons/home.svg">
+                    <span>Home</span>
+                </a>
 
-<div class="wrapper">
-    <div id="left" class="left hidden" style="display: flex; justify-content: space-between;">
-        <div>
-            <a class="menu-item" style=" margin-bottom: 1.5vh;" href="/">
-                <img class="img-invert" src="/static/icons/home.svg">
-                <span>Home</span>
-            </a>
+                <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/index">
+                    <img class="img-invert" src="/static/icons/index.svg">
+                    <span>A-Z</span>
+                </a>
+                <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/history">
+                    <img class="img-invert" src="/static/icons/history.svg">
+                    <span>History</span>
+                </a>
+                <a class="menu-item" style="margin-bottom: 1.5vh;" name="auth" href="/-/settings">
+                    <img class="img-invert" src="/static/icons/settings.svg">
+                    <span>Settings</span>
+                </a>
 
-            <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/index">
-                <img class="img-invert" src="/static/icons/index.svg">
-                <span>A-Z</span>
-            </a>
-            <a class="menu-item" style="margin-bottom: 1.5vh;" href="/-/history">
-                <img class="img-invert" src="/static/icons/history.svg">
-                <span>History</span>
-            </a>
-            <a class="menu-item" style="margin-bottom: 1.5vh;" name="auth" href="/-/settings">
-                <img class="img-invert" src="/static/icons/settings.svg">
-                <span>Settings</span>
-            </a>
+                <div id="sidebar">
+                    <input type="text" id="search" style="margin: 1vw;" placeholder="Search" autocomplete="off">
+                    <input type="text" id="replace" style="margin: 1vw;" placeholder="Replace" autocomplete="off">
+                    <button id="replaceAll" style="margin: 1vw;">Replace all</button>
+                    <button id="replaceOne" style="margin: 1vw;">Replace</button>
+                    <button id="submit" style="margin: 1vw;" onclick="submit()">Submit</button>
 
-             <div id="sidebar">
-                <input type="text" id="search" style="margin: 1vw;" placeholder="Search" autocomplete="off">
-                <input type="text" id="replace" style="margin: 1vw;" placeholder="Replace" autocomplete="off">
-                <button id="replaceAll" style="margin: 1vw;">Replace all</button>
-                <button id="replaceOne" style="margin: 1vw;">Replace</button>
-                <button id="submit" style="margin: 1vw;" onclick="submit()" >Submit</button>
-                
+                </div>
+
+
             </div>
 
-        
-        </div>
 
-        
 
-        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
 
-            <div style="width: clamp(5rem, 65%, 12.5rem); aspect-ratio: 1/1;">
-                <img style="width: 100%; " src="/{{ .S_icon }}">
+                <div style="width: clamp(5rem, 65%, 12.5rem); aspect-ratio: 1/1;">
+                    <img style="width: 100%; " src="/{{ .S_icon }}">
+                </div>
+
+                <a style="font-size: 1.75vh" href="/-/about">powered by UniT</a>
+
+
             </div>
 
-            <a style="font-size: 1.75vh" href="/-/about">powered by UniT</a>
-
-
         </div>
 
+        <div class="right" id="right">
+            <div id="content" style="width: 100%; height: 100%;">
+
+                <div id="editor-top">
+                    <input type="text" placeholder="filename" id="filename" autocomplete="off">
+                    <input type="text" placeholder="commit name" id="commit" autocomplete="off">
+                    <button id="toggle-preview">Preview</button>
+                    <button id="submit2" style="width: 90%; height: 2.5rem;" onclick="submit()">Submit</button>
+
+                </div>
+
+                <div class="editor" style="height: 90%;" id="container">
+                    <div id="editor"></div>
+                </div>
+                <div class="preview" style="display: none;" id="preview">
+
+                </div>
+
+
+
+            </div>
+        </div>
     </div>
-    
-    <div class="right" id="right">
-        <div id="content" style="width: 100%; height: 100%;">
-           
-            <div id="editor-top">
-                <input type="text" placeholder="filename" id="filename" autocomplete="off">
-                <input type="text" placeholder="commit name" id="commit" autocomplete="off">
-                <button id="toggle-preview" >Preview</button>
-            </div>
-
-            <div class="editor" style="height: 90%;" id="container">
-                <div id="editor"></div>
-            </div>
-            <div class="preview" style="display: none;" id="preview">
-                
-            </div>
-           
-
-        </div>
-    </div>
-</div>
 
 
 
-<script defer src="/static/js/page-script.js"></script>
+    <script defer src="/static/js/page-script.js"></script>
 
-<script>
+   
+    <script>
 
-let is_auth
-let authdivs = document.getElementsByName("auth")
-let login_btn = document.getElementById("loginbtn")
+    let is_auth
+    let authdivs = document.getElementsByName("auth")
+    let login_btn = document.getElementById("loginbtn")
 
-try{
-    is_auth = {{ .IsAuth }}
-}
-catch (error){
-    is_auth = false
-}
-if (!is_auth){
-    for (el of authdivs){
-        el.style.display = `none`
+    try{
+        is_auth = {{ .IsAuth }}
     }
-    login_btn.href = `/-/login?next=${window.location.href}`
-}
-else{
-    login_btn.firstElementChild.src = "/static/icons/logout.svg"
-    login_btn.href = `/-/logout?next=${window.location.pathname}`
-}
+    catch (error){
+        is_auth = false
+    }
+    if (!is_auth){
+        for (el of authdivs){
+            el.style.display = `none`
+        }
+        login_btn.href = `/-/login?next=${window.location.href}`
+    }
+    else{
+        login_btn.firstElementChild.src = "/static/icons/logout.svg"
+        login_btn.href = `/-/logout?next=${window.location.pathname}`
+    }
 
-</script>
+    </script>
 
-<script defer>
-    addEventListener("DOMContentLoaded", (event) => { 
-        splash = document.getElementsByClassName("splash")
 
-        splash[0].style.display="none"
+    <script defer>
+        addEventListener("DOMContentLoaded", (event) => {
+            splash = document.getElementsByClassName("splash")
 
-    })
-    
-</script>
+            splash[0].style.display = "none"
+
+        })
+
+    </script>
 
 </body>
+
 </html>

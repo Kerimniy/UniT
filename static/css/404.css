@@ -1,6 +1,5 @@
-
 .header1 {
-	display: flex;
+    display: flex;
     flex-direction: column;
     text-align: center;
     background: none;

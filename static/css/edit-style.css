@@ -12,7 +12,7 @@
     --bg-save: #0e7a0e;
     --bg-save-hover: #0c630c;
     --bg-selected: rgba(59, 130, 246, 0.3);
-    --bg-activeline: rgba(255,255,255,0.04);
+    --bg-activeline: rgba(255, 255, 255, 0.04);
 
     --text-body: #d4d4d4;
     --text-header: #fff;
@@ -27,7 +27,7 @@
     --border-input: #3c3c3c;
     --border-generic: #363636;
 
-    --shadow-header: rgba(0,0,0,0.5);
+    --shadow-header: rgba(0, 0, 0, 0.5);
 
     --scrollbar-track: #2a2a3d;
     --scrollbar-thumb: #555;
@@ -53,8 +53,8 @@ body.light {
     --bg-button-hover: #2f91fa;
     --bg-save: #28a745;
     --bg-save-hover: #218838;
-    --bg-selected: rgba(0,123,255,0.1);
-    --bg-activeline: rgba(0,0,0,0.05);
+    --bg-selected: rgba(0, 123, 255, 0.1);
+    --bg-activeline: rgba(0, 0, 0, 0.05);
 
     --text-body: #333333;
     --text-header: #212529;
@@ -69,7 +69,7 @@ body.light {
     --border-input: #ced4da;
     --border-generic: #dee2e6;
 
-    --shadow-header: rgba(0,0,0,0.1);
+    --shadow-header: rgba(0, 0, 0, 0.1);
 
     --scrollbar-track: #f1f1f1;
     --scrollbar-thumb: #c1c1c1;
@@ -82,7 +82,7 @@ body.light {
     --cursor-color: #000000;
 }
 
-p{
+p {
     display: auto;
 }
 
@@ -113,18 +113,18 @@ a:hover {
     background: var(--scrollbar-thumb-hover);
 }
 
-        body {
-            margin: 0;
-            font-family: 'system-ui','Segoe UI', Arial, sans-serif;
-            background: var(--bg-body);
-            color: var(--text-body);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        header {
+body {
+    margin: 0;
+    font-family: 'system-ui', 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-body);
+    color: var(--text-body);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+header {
     height: 7.5vh;
     background-color: var(--bg-header);
     display: flex;
@@ -136,238 +136,267 @@ a:hover {
     font-weight: bold;
     color: var(--text-header);
     box-shadow: 0 2px 5px var(--shadow-header);
-        }
-        
-      
-
-        li {
-            padding: 4px 0;
-        }
-
-        .title {
-            font-size: 18px;
-            font-weight: 600;
-            padding-left: 5vw;
-        }
-        
-        .toolbar {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        /*
-        input[type="text"] {
-            border: 1px solid var(--border-input);
-            background: var(--bg-input);
-            color: var(--text-input);
-            border-radius: 4px;
-            width: 85%;
-            padding: 0.5vw;
-            font-size: 13px;
-            
-        }
-        */
-        
-        input[type="text"] {
-           width: 100%;
-            padding: 0.55rem;
-            background-color: var(--bg-input);
-            border: 0.25vh solid var(--border-secondary);
-            border-radius: 2vh;
-            color: var(--text-search-input);
-            font-size: 1rem;
-            outline: none;
-            box-sizing: border-box;
-            
-        }
-        
-        button {
-            background-color: var(--bg-button);
-            color: var(--text-button);
-            border: none;
-            border-radius: 1rem;
-            cursor: pointer;
-            font-size: 13px;
-            width: calc(100% - 1rem);
-            padding: 0.5rem;
-
-        }
-        
-        button:hover {
-            background: var(--bg-button-hover);
-             transition: background-color 0.2s ease;
-        }
-        
-        button.save {
-            background: var(--bg-save);
-        }
-        
-        button.save:hover {
-            background: var(--bg-save-hover);
-        }
-        
-        #container {
-            flex: 1;
-            position: relative;
-        }
-        
-        #editor {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            font-size: 14px;
-        }
-        #sidebar {
-            display: flex;
-            flex-direction: column;
-            align-items: center;         
-            justify-content: flex-start;
-            width: 95%;
-            min-width: 120px;
-            gap: 12px;                  
-            height: 100%;
-            background: var(--bg-sidebar);
-        }
-    
-    
-        html,body,#editor {  margin:0; background:var(--bg-editor); }
-        .CodeMirror-scroll { scrollbar-color: var(--scrollbar-cm-color); }
-        .CodeMirror-scroll::-webkit-scrollbar { width:12px; height:12px; }
-        .CodeMirror-scroll::-webkit-scrollbar-track { background:var(--scrollbar-cm-track); }
-        .CodeMirror-scroll::-webkit-scrollbar-thumb { background:var(--scrollbar-cm-thumb); border-radius:6px; }
-        .CodeMirror-scroll::-webkit-scrollbar-thumb:hover { background:var(--scrollbar-cm-thumb-hover); }
-    
-
-    
-
-        .wrapper{
-            display: flex;flex-direction: row; height: 92.5vh
-        }
-
-        .preview{
-
-            padding: 2vh;
-            overflow-x:auto;
-            background: var(--bg-preview)
-            
-            
-        }
-        .editor{
-            width: 100%;
-            height: 100%;
-            overflow-x: hidden;
-        }
-        #submit2{
-            display: none;
-        }
-        .hideonmobile{
-            display: auto;
-        }
-        @media (max-width: 750px){
-            *::-webkit-scrollbar {
-                width: 5px;
-                height: auto;
-            }
-             .hideonmobile{
-                display: none;
-            }
-            .wrapper{
-                flex-direction: column;
-            }
-            .preview
-            {
-                width: 100%; 
-            }
-            .editor{
-                
-                width: 100%;
-
-                height: 60%;
-            }
-            /*
-            #sidebar{
-                display: none;
-            }
-            */
-            #submit2{
-                display: block;
-            }
-            .title{
-                font-size: 1.5vh;
-                font-weight: 600;
-                padding-left: 0.5vw;
-            }
-        }
+}
 
 
-#editor-top{
-    display: flex; 
-    flex-direction: row; 
-    align-items: center; 
-    width: calc(100% - 2rem); 
-    gap:1rem; 
-    padding: 1rem; 
+
+li {
+    padding: 4px 0;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    padding-left: 5vw;
+}
+
+.toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.55rem;
+    background-color: var(--bg-input);
+    border: 0.25vh solid var(--border-secondary);
+    border-radius: 2vh;
+    color: var(--text-search-input);
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+
+}
+
+button {
+    background-color: var(--bg-button);
+    color: var(--text-button);
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    font-size: 13px;
+    width: calc(100% - 1rem);
+    padding: 0.5rem;
+
+}
+
+button:hover {
+    background: var(--bg-button-hover);
+    transition: background-color 0.2s ease;
+}
+
+button.save {
+    background: var(--bg-save);
+}
+
+button.save:hover {
+    background: var(--bg-save-hover);
+}
+
+#container {
+    flex: 1;
+    position: relative;
+}
+
+#editor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 14px;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 95%;
+    min-width: 120px;
+    gap: 12px;
+    height: 100%;
+    background: var(--bg-sidebar);
+}
+
+
+html,
+body,
+#editor {
+    margin: 0;
+    background: var(--bg-editor);
+}
+
+.CodeMirror-scroll {
+    scrollbar-color: var(--scrollbar-cm-color);
+}
+
+.CodeMirror-scroll::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.CodeMirror-scroll::-webkit-scrollbar-track {
+    background: var(--scrollbar-cm-track);
+}
+
+.CodeMirror-scroll::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-cm-thumb);
+    border-radius: 6px;
+}
+
+.CodeMirror-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-cm-thumb-hover);
+}
+
+
+
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 92.5vh
+}
+
+.preview {
+
+    padding: 2vh;
+    overflow-x: auto;
+    background: var(--bg-preview)
+}
+
+.editor {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+#submit2 {
+    display: none;
+}
+
+.hideonmobile {
+    display: auto;
+}
+
+@media (max-width: 750px) {
+    *::-webkit-scrollbar {
+        width: 5px;
+        height: auto;
+    }
+
+    .hideonmobile {
+        display: none;
+    }
+
+    .wrapper {
+        flex-direction: column;
+    }
+
+    .preview {
+        width: 100%;
+    }
+
+    .editor {
+
+        width: 100%;
+
+        height: 60%;
+    }
+
+   
+
+    .title {
+        font-size: 1.5vh;
+        font-weight: 600;
+        padding-left: 0.5vw;
+    }
+}
+
+
+#editor-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: calc(100% - 2rem);
+    gap: 1rem;
+    padding: 1rem;
     justify-content: space-between;
 }
-#filename{
-    margin: 1vw; width: 45%;
+
+#filename {
+    margin: 1vw;
+    width: 45%;
 }
-#commit{
-    margin: 1vw; width: 35%;
+
+#commit {
+    margin: 1vw;
+    width: 35%;
 }
- 
-#toggle-preview{
-    width: 20%; 
+
+#toggle-preview {
+    width: 20%;
     height: 2.5rem;
 }
- 
-@media (max-width: 550px){
-    #editor-top{
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        width: calc(100% - 2rem); 
-        gap:1rem; 
-        padding: 1rem; 
+
+@media (max-width: 550px) {
+    #editor-top {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: calc(100% - 2rem);
+        gap: 1rem;
+        padding: 1rem;
         justify-content: center;
     }
-    #filename{
-        margin: 0.5rem; width: 90%;
+
+    #submit2 {
+        display: block;
     }
-    #commit{
-        margin: 0.5rem; width: 90%;
+
+    #filename {
+        margin: 0.5rem;
+        width: 90%;
     }
-    
-    #toggle-preview{
-        width: 90%; 
+
+    #commit {
+        margin: 0.5rem;
+        width: 90%;
+    }
+
+    #toggle-preview {
+        width: 90%;
         height: 2.5rem;
     }
 }
-    
+
 .CodeMirror {
-  background: var(--bg-codemirror) !important;
-  color: var(--text-codemirror) !important;
-  height: 100% !important;
-  font-size: 14px;
+    background: var(--bg-codemirror) !important;
+    color: var(--text-codemirror) !important;
+    height: 100% !important;
+    font-size: 14px;
 }
 
 .CodeMirror pre.CodeMirror-line {
-  color: var(--text-codemirror) !important;
+    color: var(--text-codemirror) !important;
 }
 
 .CodeMirror-cursor {
-  border-left: 1px solid var(--cursor-color) !important;
+    border-left: 1px solid var(--cursor-color) !important;
 }
 
 .CodeMirror-selected {
-  background: var(--bg-selected) !important;
+    background: var(--bg-selected) !important;
 }
 
 .CodeMirror-gutters {
-  background: var(--bg-gutters) !important;
-  color: var(--text-gutters) !important;
-  border-right: 0px;
+    background: var(--bg-gutters) !important;
+    color: var(--text-gutters) !important;
+    border-right: 0px;
 }
 
 .CodeMirror-activeline-background {
-  background: var(--bg-activeline) !important;
+    background: var(--bg-activeline) !important;
 }
