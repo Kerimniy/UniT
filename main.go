@@ -165,8 +165,6 @@ func main() {
 		host = "127.0.0.1:6060"
 	}
 
-	fmt.Println(host)
-
 	file, f_err := os.Open("SECRET_KEY")
 	if f_err != nil {
 		_, e := rand.Read(SECRET_KEY)
@@ -211,7 +209,7 @@ func main() {
 	rows, e := db.Query("SELECT * FROM users")
 
 	if e != nil || de0 != nil || de1 != nil || de2 != nil {
-		log.Fatal(e)
+		log.Fatal(e, de0, de1, de2)
 	}
 	defer func() {
 		err0 := rows.Close()
