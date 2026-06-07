@@ -607,21 +607,24 @@ img[data-att] {
 }
 
 .modal-content {
-    width: clamp(20rem, 40vw, 30rem);
+    width: clamp(20rem, 40vw, 25rem);
     height: 20vh;
-    padding: 1.5rem;
-    border-radius: 2rem;
+    padding: 1.25rem;
+    border-radius: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: var(--bg-modal);
+    backdrop-filter: blur(4px);
+    gap: 0rem;
+    border: var(--border-btn) 0.5rem solid;
 }
 
 .modal-title {
     color: var(--text-primary);
     margin-bottom: 2rem;
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     text-align: center;
 }
 
@@ -630,17 +633,18 @@ img[data-att] {
     justify-content: center;
     gap: 2rem;
     width: 100%;
+
 }
 
 .modal-button {
     padding: 0.75rem 2rem;
     font-size: 1.4rem;
     border-width: 0vh;
-    border-radius: 1rem;
-    background-color: var(--bg-btn);
+    border-radius: 0.75rem;
     color: var(--text-primary);
     cursor: pointer;
     transition: background-color 0.15s ease;
+    border: var(--border-btn) 0.25rem solid;
 }
 
 .modal-button:hover {

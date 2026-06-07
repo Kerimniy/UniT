@@ -150,6 +150,10 @@ func getSignedCookie(r *http.Request, w http.ResponseWriter) string {
 }
 
 func test(w http.ResponseWriter, r *http.Request) {
+
+	w.WriteHeader(403)
+	return
+
 	var t = template.Must(template.ParseFiles("templates/TEST.html"))
 
 	t.Execute(w, nil)
