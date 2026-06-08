@@ -616,7 +616,7 @@ img[data-att] {
     align-items: center;
     justify-content: center;
     background-color: var(--bg-modal);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(48px);
     gap: 0rem;
     border: var(--border-btn) 0.5rem solid;
 }
@@ -645,6 +645,7 @@ img[data-att] {
     cursor: pointer;
     transition: background-color 0.15s ease;
     border: var(--border-btn) 0.25rem solid;
+    background: var(--shadow-primary);
 }
 
 .modal-button:hover {
