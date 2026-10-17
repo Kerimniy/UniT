@@ -36,8 +36,6 @@ func main() {
 	tgbot.InitTGBot(ctx)
 	fmt.Println(time.Now(), "Initialized tg bot service ")
 
-	services.InitSearch()
-	fmt.Println(time.Now(), "Initialized search")
 
 	config.Admin = services.Admin_exist()
 	fmt.Println(time.Now(), "Initialized admin status")

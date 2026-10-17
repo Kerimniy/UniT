@@ -11,7 +11,7 @@ import { BACKEND_BASE_URL } from "./config";
 export default function App() {
 
   const [backendStatus, setBackendStatus] = useState(false)
-/*
+
   useEffect(() => {
     try {
       fetch(`${BACKEND_BASE_URL}/api/generate-204`).then((res) => {
@@ -28,7 +28,7 @@ export default function App() {
       setBackendStatus(false)
     }
   }, [])
-*/
+
   return (
     <AuthProvider>
       <div className="flex h-screen w-full">

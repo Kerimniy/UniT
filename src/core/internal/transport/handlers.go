@@ -48,8 +48,7 @@ func ListenAndServeHTTP(ctx context.Context) {
 	mux.HandleFunc("/manage/rename", services.RenameHandle)
 
 	mux.HandleFunc("/info/upload-limit", getUploadLimit)
-	mux.HandleFunc("/info/search-limit", getSearchLimit)
-	mux.HandleFunc("/info/result-limit", getResultLimit)
+	mux.HandleFunc("/api/generate-204", generate204)
 
 	mux.HandleFunc("/", indexPage)
 
@@ -94,14 +93,14 @@ func getUploadLimit(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getSearchLimit(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, strconv.Itoa(config.AppConf.SearchResultCount))
-}
-
-func getResultLimit(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, strconv.Itoa(config.AppConf.ResultCount))
+func generate204(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(204)
 }
 
 func indexPage(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+        http.NotFound(w, r) 
+        return
+    }
 	http.Redirect(w, r, os.Getenv("FRONTEND"), 308)
 }

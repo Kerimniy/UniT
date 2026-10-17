@@ -40,6 +40,8 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	err := db.Db.Where("email= ?", email).First(&user).Error
 
+	fmt.Println("dd", email, user)
+
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		w.WriteHeader(401)
 
@@ -240,7 +242,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
+	
+	fmt.Println(getSignedCookie(r,w))
 	deleteCookie(w)
+
 }
 
 func Change_password(w http.ResponseWriter, r *http.Request) {

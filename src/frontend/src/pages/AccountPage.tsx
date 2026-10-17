@@ -18,11 +18,6 @@ export default function AccountPage() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (user === null) {
-      navigate("/-/auth/sign-in")
-    }
-  })
 
 
   return (
@@ -56,15 +51,13 @@ function AccountInfo() {
   const { user } = useAuth()
 
   return (
-    <section className="max-w-2xl flex flex-col items-center">
+    <section className="max-w-2xl flex flex-col items-start w-full">
 
-      <h2 className="text-lg font-semibold mb-4 ">
+      <h2 className="text-lg font-semibold mb-6 text-left w-full">
         Current info
       </h2>
 
       <div className="space-y-2">
-
-
 
         <div>
           <b>Email:</b> {user?.email}
@@ -119,7 +112,7 @@ export function ChangePassword() {
 
   return (
     <section className="max-w-2xl w-full">
-      <h2 className="text-lg font-semibold mb-4">Change password</h2>
+      <h2 className="pb-4">Change password</h2>
 
       {status && (
         <div className={`p-3 mb-4 rounded-md text-sm font-medium border text-center ${status.isError

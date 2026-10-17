@@ -1,0 +1,4 @@
+src/.env
+src/core/.TG_CHAT_ID
+src/core/.SECRET_KEY
+src/core/.main.db

@@ -9,10 +9,8 @@ import (
 )
 
 type Config struct {
-	ExposingDir       string
-	ResultCount       int
-	SearchResultCount int
 	UploadLimit       int
+	ExposingDir string
 }
 
 type AdminStruct struct {
@@ -31,19 +29,13 @@ func InitConf() {
 		panic(err)
 	}
 
-	resultCount, err := strconv.Atoi(os.Getenv("RESULT_COUNT"))
-	searchResultCount, err := strconv.Atoi(os.Getenv("SEARCH_RESULT_COUNT"))
-
-	if err != nil {
-		log.Fatal("ERROR 57 (get count) ", err)
-	}
-
+	
 	_upload_limit, err := strconv.Atoi(os.Getenv("UPLOAD_LIMIT"))
 
 	if err != nil {
 		log.Fatal("ERROR 62 (get limit) ", err)
 	}
 
-	AppConf = Config{ExposingDir: os.Getenv("EXPDIR"), ResultCount: resultCount, SearchResultCount: searchResultCount, UploadLimit: _upload_limit}
+	AppConf = Config{UploadLimit: _upload_limit}
 
 }

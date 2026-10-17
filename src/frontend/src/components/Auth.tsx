@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
-import { useState, createContext, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, createContext, useContext, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { BACKEND_BASE_URL } from "@/config";
+import { Spinner } from "./ui/spinner";
 
 export interface UserStruct {
     email: string;
@@ -9,42 +10,50 @@ export interface UserStruct {
 
 }
 
+export function RequireAuth({ children }: { children: ReactNode }) {
+    const { user, loading } = useAuth();
+
+    if (loading) return <Spinner />; 
+    if (!user) return <Navigate to="/-/auth/sign-in" replace />;
+
+    return <>{children}</>;
+}
+
 export const AuthContext = createContext<{
     user: UserStruct | null;
     setUser: React.Dispatch<React.SetStateAction<UserStruct | null>>;
     updateUser: () => Promise<void>;
+    loading: boolean
 } | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<UserStruct | null>(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
-    /*useEffect(() => {
-        fetch(`${BACKEND_BASE_URL}/auth/me`, {
-            credentials: "include"
-        })
-            .then(r => {
+    useEffect(() => {
+        const controller = new AbortController();
 
-                if (r.ok) {
-                    if (r.headers.get("content-type")?.includes("application/json")) {
-                        return r.json()
-                    }
-                    else {
-                        return r.text()
-                    }
-                }
-                else if (r.status === 401) {
-                }
-                return null;
-            })
-            .then((data) => {
-                if (typeof (data) === "string" && data === "no-user") {
-                    navigate("/.@/auth/sign-up")
+        (async () => {
+            try {
+                const r = await fetch(`${BACKEND_BASE_URL}/auth/me`, {
+                    credentials: "include",
+                    signal: controller.signal,
+                });
+
+                if (r.ok && r.headers.get("content-type")?.includes("application/json")) {
+                    setUser(await r.json());
                 } else {
-                    setUser(data);
+                    setUser(null); 
                 }
-            });
+            } catch (e) {
+                if ((e as Error).name !== "AbortError") setUser(null);
+            } finally {
+                if (!controller.signal.aborted) setLoading(false);
+            }
+        })();
+
+        return () => controller.abort();
     }, []);
-*/
 
     const updateUser = async () => {
         const r = await fetch(`${BACKEND_BASE_URL}/auth/me`, {
@@ -60,14 +69,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 setUser(await r.json());
             }
             else {
-                navigate("/.@/auth/sign-up")
+                navigate("/-/auth/sign-up")
                 setUser(null)
             }
         };
 
     };
     return (
-        <AuthContext.Provider value={{ user, setUser, updateUser }}>
+        <AuthContext.Provider value={{ user, setUser, updateUser, loading }}>
             {children}
         </AuthContext.Provider>
     );

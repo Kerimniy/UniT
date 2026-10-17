@@ -18,13 +18,14 @@ import { BACKEND_BASE_URL } from "@/config";
 import { ContextMenu } from "@/components/ContextMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { useAuth, type UserStruct } from "@/components/Auth";
+import { RequireAuth, useAuth, type UserStruct } from "@/components/Auth";
 import { Routes, Route } from "react-router-dom";
 import Content from "./Content";
 import AccountPage from "./AccountPage";
 import EditorPage  from "@/pages/Editor"
 import IndexPage from "./IndexPage";
 import AuthPage from "./AuthPage";
+import { authService } from "@/lib/user";
 const items = [
     { title: "Home", url: "/", icon: Home },
     { title: "Index", url: "/-/index", icon: List },
@@ -71,20 +72,15 @@ function SignIn({
     if (status) {
         if (user == null) {
             return (
-                <Button onClick={() => navigate("/-/sign-in")}>
+                <Button variant="outline" onClick={() => navigate("/-/auth/sign-in")}>
                     <LogIn />
                 </Button>
             );
         } else {
             return (
-                <Button
+                <Button variant="outline"
                     onClick={() => {
-                        fetch(`${BACKEND_BASE_URL}/api/log-out`)
-                            .then((res) => {
-                                if (res.ok) {
-                                    window.location.reload();
-                                }
-                            });
+                        authService.logout(()=>{window.location.reload()})
                     }}
                 >
                     <LogOut />
@@ -120,11 +116,11 @@ export default function Page({ backendStatus }: { backendStatus: boolean }) {
             <div className="flex flex-1 w-full">
                 <AppSidebar />
                 <SidebarInset className="min-w-0">
-                    <main className="p-4 w-full text-left">
+                    <main className="w-full h-full text-left">
                         <Routes>
                             <Route path="/*" element={<Content></Content>}></Route>
-                            <Route path="/-/settings" element={<AccountPage></AccountPage>}></Route>
-                            <Route path="/-/edit" element={<EditorPage></EditorPage>}></Route>
+                            <Route path="/-/settings" element={<RequireAuth><AccountPage></AccountPage></RequireAuth>}></Route>
+                            <Route path="/-/edit" element={<RequireAuth><EditorPage></EditorPage></RequireAuth>}></Route>
                             <Route path="/-/index" element={<IndexPage></IndexPage>}></Route>
                             <Route path="/-/auth/*" element={<AuthPage></AuthPage>}></Route>
                         </Routes>
