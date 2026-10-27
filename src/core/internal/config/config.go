@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -16,7 +17,7 @@ type IndexStruct struct {
 
 type Config struct {
 	UploadLimit int
-	ExposingDir string
+	RepoDir     string
 	Index       IndexStruct
 }
 
@@ -42,6 +43,13 @@ func InitConf() {
 		log.Fatal("ERROR 62 (get limit) ", err)
 	}
 
-	AppConf = Config{UploadLimit: _upload_limit}
+	_repo_dir := os.Getenv("GIT_REPO_PATH")
+
+	if _repo_dir == "" {
+		fmt.Println("INFO: no GIT_REPO_PATH in .env, ''./data'' will be used insteed")
+		_repo_dir = "./data"
+	}
+
+	AppConf = Config{UploadLimit: _upload_limit, RepoDir: _repo_dir}
 
 }

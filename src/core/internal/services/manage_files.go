@@ -50,9 +50,9 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	path := filepath.Join(config.AppConf.ExposingDir, filename)
+	path := filepath.Join(config.AppConf.RepoDir, filename)
 
-	rel, err := filepath.Rel(config.AppConf.ExposingDir, path)
+	rel, err := filepath.Rel(config.AppConf.RepoDir, path)
 
 	if err != nil {
 		fmt.Println(err)
@@ -60,9 +60,9 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newPath := filepath.Join(config.AppConf.ExposingDir, payload.NewName)
+	newPath := filepath.Join(config.AppConf.RepoDir, payload.NewName)
 
-	rel, err = filepath.Rel(config.AppConf.ExposingDir, newPath)
+	rel, err = filepath.Rel(config.AppConf.RepoDir, newPath)
 
 	if err != nil {
 		fmt.Println(err)
@@ -117,7 +117,7 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = commitAndPush(repo, fmt.Sprintf("Edit %s. T=%s", payload.NewName, time.Now().String()))
+	err = commitAndPush(fmt.Sprintf("Edit %s. T=%s", payload.NewName, time.Now().String()))
 
 	if err != nil {
 		fmt.Println(err)
@@ -138,9 +138,9 @@ func DeleteHandle(w http.ResponseWriter, r *http.Request) {
 	filename := r.URL.Query().Get("file")
 	filename = strings.Trim(strings.TrimLeft(filename, "/"), "/")
 
-	path := filepath.Join(config.AppConf.ExposingDir, filename)
+	path := filepath.Join(config.AppConf.RepoDir, filename)
 
-	rel, err := filepath.Rel(config.AppConf.ExposingDir, path)
+	rel, err := filepath.Rel(config.AppConf.RepoDir, path)
 
 	if err != nil {
 		w.WriteHeader(400)
@@ -169,7 +169,7 @@ func DeleteHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = commitAndPush(repo, fmt.Sprintf("Delete %s. T=%s", filename, time.Now().String()))
+	err = commitAndPush(fmt.Sprintf("Delete %s. T=%s", filename, time.Now().String()))
 
 	if err != nil {
 		fmt.Println(err)
@@ -192,8 +192,8 @@ func RenameHandle(w http.ResponseWriter, r *http.Request) {
 	_f := strings.Trim(strings.TrimLeft(query.Get("file"), "/"), "/")
 	_n := strings.Trim(strings.TrimLeft(query.Get("name"), "/"), "/")
 
-	fileName := filepath.Join(config.AppConf.ExposingDir, _f)
-	newName := filepath.Join(config.AppConf.ExposingDir, _n)
+	fileName := filepath.Join(config.AppConf.RepoDir, _f)
+	newName := filepath.Join(config.AppConf.RepoDir, _n)
 
 	err := os.Rename(fileName, newName)
 
@@ -203,13 +203,7 @@ func RenameHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = os.Open(newName)
 
-	if err != nil {
-		w.WriteHeader(500)
-		io.WriteString(w, "Rename error: "+err.Error())
-		return
-	}
 
 	err = UpdateIndex(_f, true)
 
@@ -229,7 +223,7 @@ func RenameHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = commitAndPush(repo, fmt.Sprintf("Renamed %s to %s. T=%s", _n, _f, time.Now().String()))
+	err = commitAndPush(fmt.Sprintf("Renamed %s to %s. T=%s", _n, _f, time.Now().String()))
 
 	if err != nil {
 		fmt.Println(err)

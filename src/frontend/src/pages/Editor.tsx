@@ -3,7 +3,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
 import type * as Monaco from "monaco-editor";
 import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
-import { BACKEND_BASE_URL } from "@/config";
+import { BACKEND_BASE_URL, REPO_BASE_URL } from "@/config";
 
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Save, Search, Replace, FileCode2, Loader2 } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/components/Auth";
+import { joinPath, trimSlashes } from "@/lib/utils";
 
 
 
@@ -59,8 +60,11 @@ export default function EditPage() {
         if (!pageParam) return;
 
         setIsLoading(true);
-        fetch(`${BACKEND_BASE_URL}/s/${pageParam}?open=true`)
+        fetch(`${REPO_BASE_URL}/${trimSlashes(pageParam)}`)
             .then((res) => {
+                if (res.status===404){
+                    navigate("/-/edit")
+                }
                 if (res.ok) return res.text();
                 throw new Error("Failed to fetch file");
             })
@@ -73,13 +77,9 @@ export default function EditPage() {
 
     const handleSave = async () => {
 
-
-
-        if (!pageParam) return;
-
         setIsSaving(true);
         try {
-            const response = await fetch(`${BACKEND_BASE_URL}/manage/create?file=${pageParam}`, {
+            const response = await fetch(`${BACKEND_BASE_URL}/manage/create?file=${joinPath(pathname,filename)}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ newName: (pathname + filename), content: content }),

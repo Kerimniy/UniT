@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"time"
@@ -32,6 +33,14 @@ func main() {
 
 	db.InitDb()
 	fmt.Println(time.Now(), "Initialized database ")
+
+	err:=services.InitGit()
+	if err!=nil{
+		log.Fatal("Git intitialization error: ",err)
+		return
+	} else{
+		fmt.Println(time.Now(), "Initialized git service ")
+	}
 
 	tgbot.InitTGBot(ctx)
 	fmt.Println(time.Now(), "Initialized tg bot service ")

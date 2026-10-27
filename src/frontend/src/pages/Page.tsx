@@ -104,7 +104,7 @@ export function setNewStatus(msg: string, isError: boolean, setStatus: React.Dis
 
     setStatus(message)
 
-    setTimeout(() => { setStatus(null) }, 5000)
+    setTimeout(() => { setStatus(null) }, 10000)
 }
 
 

@@ -16,26 +16,26 @@ import (
 	"kerimniy.qzz.io/vebvy/internal/config"
 )
 
-var GIT_TOKEN string
+var GIT_REPO_TOKEN string
 var GIT_REPO_URL string
 var repo *git.Repository
 
 func InitGit() error {
 
-	GIT_TOKEN = os.Getenv("GIT_TOKEN")
+	GIT_REPO_TOKEN = os.Getenv("GIT_REPO_TOKEN")
 	GIT_REPO_URL = os.Getenv("GIT_REPO_URL")
 
-	if GIT_TOKEN == "" {
+	if GIT_REPO_TOKEN == "" {
 		return fmt.Errorf("GIT_TOKEN is not set")
 	}
 
 	if GIT_REPO_URL == "" {
 		return fmt.Errorf("GIT_REPO_URL is not set")
 	}
-
-	repo, err := openOrClone(
+	var err error
+	repo, err = openOrClone(
 		GIT_REPO_URL,
-		config.AppConf.ExposingDir,
+		config.AppConf.RepoDir,
 	)
 	if err != nil {
 		return err
@@ -52,7 +52,7 @@ func InitGit() error {
 	if err != nil {
 		return err
 	}
-
+	fmt.Println(repo == nil, "SSSSSSSS")
 	return nil
 }
 
@@ -87,13 +87,13 @@ func pull(repo *git.Repository) error {
 	return nil
 }
 func UpdateIndex(path string, isDelete bool) error {
-	p := filepath.Join(config.AppConf.ExposingDir, "index.json")
+	p := filepath.Join(config.AppConf.RepoDir, "index.json")
 	file, err := os.Create(p)
-	defer file.Close().Error()
 
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 
 	config.AppConf.Index.Mu.Lock()
 	if isDelete {
@@ -118,17 +118,20 @@ func UpdateIndex(path string, isDelete bool) error {
 }
 
 func loadIndex() error {
-	p := filepath.Join(config.AppConf.ExposingDir, "index.json")
+	p := filepath.Join(config.AppConf.RepoDir, "index.json")
 	file, err := os.Open(p)
-	defer file.Close().Error()
 
 	if err != nil {
 		if os.IsNotExist(err) {
-			_, err = os.Create(p)
+			f, err := os.Create(p)
 			if err != nil {
 				log.Fatal(err)
 				return err
 			}
+
+			defer f.Close()
+			f.WriteString("{}")
+
 		} else {
 			return err
 		}
@@ -145,11 +148,12 @@ func loadIndex() error {
 			return err
 		}
 	}
+	defer file.Close()
+
 	return nil
 }
 
 func commitAndPush(
-	repo *git.Repository,
 	message string,
 ) error {
 	wt, err := repo.Worktree()
@@ -184,8 +188,8 @@ func commitAndPush(
 	err = repo.Push(&git.PushOptions{
 		RemoteName: "origin",
 		Auth: &http.BasicAuth{
-			Username: "your-username",
-			Password: GIT_TOKEN,
+			Username: "Vebvy",
+			Password: GIT_REPO_TOKEN,
 		},
 	})
 	if err != nil && err != git.NoErrAlreadyUpToDate {
