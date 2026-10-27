@@ -73,56 +73,33 @@ export default function EditPage() {
 
     const handleSave = async () => {
 
-        if (location.pathname == "/.@/create") {
 
-            setIsSaving(true);
-            try {
-                const response = await fetch(`${BACKEND_BASE_URL}/manage/upload?file=${filename}&edit=false`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: content,
-                    credentials: "include"
-                });
 
-                if (!response.ok) throw new Error("Save failed");
+        if (!pageParam) return;
 
-                console.log("Saved");
+        setIsSaving(true);
+        try {
+            const response = await fetch(`${BACKEND_BASE_URL}/manage/create?file=${pageParam}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ newName: (pathname + filename), content: content }),
+                credentials: "include"
+            });
 
-                navigate(`/.@/edit?page=${filename}`)
+            if (!response.ok) throw new Error("Save failed");
 
-            } catch (error) {
-                console.error("Error saving file:", error);
-            } finally {
-                setIsSaving(false);
-            }
+            console.log("Saved");
+
+            searchParams.set("page", pathname + filename)
+            setSearchParams(searchParams)
+
+        } catch (error) {
+            console.error("Error saving file:", error);
+        } finally {
+            setIsSaving(false);
         }
-        else {
+    }
 
-            if (!pageParam) return;
-
-            setIsSaving(true);
-            try {
-                const response = await fetch(`${BACKEND_BASE_URL}/manage/upload?file=${pageParam}&edit=true`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ newName: (pathname + filename), content: content }),
-                    credentials: "include"
-                });
-
-                if (!response.ok) throw new Error("Save failed");
-
-                console.log("Saved");
-
-                searchParams.set("page", pathname + filename)
-                setSearchParams(searchParams)
-
-            } catch (error) {
-                console.error("Error saving file:", error);
-            } finally {
-                setIsSaving(false);
-            }
-        }
-    };
 
     if (isLoading) {
         return (

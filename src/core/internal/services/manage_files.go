@@ -8,10 +8,10 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"kerimniy.qzz.io/vebvy/internal/config"
 )
-
 
 type UploadData struct {
 	NewName string `json:"newName"`
@@ -28,92 +28,76 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 	filename := r.URL.Query().Get("file")
 	filename = strings.Trim(strings.TrimLeft(filename, "/"), "/")
 
-	isEdit := r.URL.Query().Get("edit") == "true"
+	if r.Method == "OPTIONS" {
+		return
+	}
 
-	if !isEdit {
-		path := filepath.Join(config.AppConf.ExposingDir, filename)
+	b, e := io.ReadAll(r.Body)
 
-		rel, err := filepath.Rel(config.AppConf.ExposingDir, path)
-		if err != nil {
-			w.WriteHeader(400)
-			return
-		}
+	if e != nil {
+		fmt.Println(e)
 
-		if strings.HasPrefix(rel, "..") {
+		w.WriteHeader(500)
+		return
+	}
+	payload := UploadData{}
+	err := json.Unmarshal(b, &payload)
 
-			w.WriteHeader(400)
-			return
-		}
+	if err != nil {
+		fmt.Println(err)
 
-		file, err := CreateFile(path)
+		w.WriteHeader(500)
+		return
+	}
 
-		if err != nil {
-			w.WriteHeader(500)
-			return
-		}
+	path := filepath.Join(config.AppConf.ExposingDir, filename)
 
-		defer file.Close()
+	rel, err := filepath.Rel(config.AppConf.ExposingDir, path)
 
-		_, err = io.Copy(file, r.Body)
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(400)
+		return
+	}
 
-		if err != nil {
-			w.WriteHeader(500)
-			return
-		}
-	
+	newPath := filepath.Join(config.AppConf.ExposingDir, payload.NewName)
 
-	} else {
+	rel, err = filepath.Rel(config.AppConf.ExposingDir, newPath)
 
-		if r.Method == "OPTIONS" {
-			return
-		}
+	if err != nil {
+		fmt.Println(err)
 
-		b, e := io.ReadAll(r.Body)
+		w.WriteHeader(400)
+		return
+	}
 
-		if e != nil {
-			fmt.Println(e)
+	if strings.HasPrefix(rel, "..") {
 
-			w.WriteHeader(500)
-			return
-		}
-		payload := UploadData{}
-		err := json.Unmarshal(b, &payload)
+		w.WriteHeader(400)
+		return
+	}
 
-		if err != nil {
-			fmt.Println(err)
+	file, err := CreateFile(path)
 
-			w.WriteHeader(500)
-			return
-		}
+	if err != nil {
+		fmt.Println(err)
 
-		path := filepath.Join(config.AppConf.ExposingDir, filename)
+		w.WriteHeader(500)
+		return
+	}
 
-		rel, err := filepath.Rel(config.AppConf.ExposingDir, path)
+	_, err = io.WriteString(file, payload.Content)
 
-		if err != nil {
-			fmt.Println(err)
-			w.WriteHeader(400)
-			return
-		}
+	if err != nil {
+		fmt.Println(err)
 
-		newPath := filepath.Join(config.AppConf.ExposingDir, payload.NewName)
+		w.WriteHeader(500)
+		return
+	}
+	file.Close()
 
-		rel, err = filepath.Rel(config.AppConf.ExposingDir, newPath)
-
-		if err != nil {
-			fmt.Println(err)
-
-			w.WriteHeader(400)
-			return
-		}
-
-		if strings.HasPrefix(rel, "..") {
-
-			w.WriteHeader(400)
-			return
-		}
-
-		file, err := CreateFile(path)
+	if newPath != "" {
+		err = os.Rename(path, newPath)
 
 		if err != nil {
 			fmt.Println(err)
@@ -122,28 +106,24 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		_, err = io.WriteString(file, payload.Content)
+	}
 
-		if err != nil {
-			fmt.Println(err)
+	err = UpdateIndex(payload.NewName, false)
 
-			w.WriteHeader(500)
-			return
-		}
-		file.Close()
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte("Update index error"))
+		return
+	}
 
-		if newPath != "" {
-			err = os.Rename(path, newPath)
+	err = commitAndPush(repo, fmt.Sprintf("Edit %s. T=%s", payload.NewName, time.Now().String()))
 
-			if err != nil {
-				fmt.Println(err)
-
-				w.WriteHeader(500)
-				return
-			}
-
-		}
-
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte("Push error"))
+		return
 	}
 
 }
@@ -180,59 +160,22 @@ func DeleteHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
-}
-
-func DeleteAllHandle(w http.ResponseWriter, r *http.Request) {
-
-	if !checkAdmin(w, r) {
-		w.WriteHeader(403)
-		return
-	}
-
-	filenames := []string{}
-
-	b, e := io.ReadAll(r.Body)
-
-	if e != nil {
-		w.WriteHeader(500)
-		return
-	}
-
-	err := json.Unmarshal(b, &filenames)
+	err = UpdateIndex(filename, true)
 
 	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(500)
+		w.Write([]byte("Update index error"))
 		return
 	}
 
-	for _, filename := range filenames {
+	err = commitAndPush(repo, fmt.Sprintf("Delete %s. T=%s", filename, time.Now().String()))
 
-		path := filepath.Join(config.AppConf.ExposingDir, filename)
-		filename = strings.Trim(strings.TrimLeft(filename, "/"), "/")
-
-		rel, err := filepath.Rel(config.AppConf.ExposingDir, path)
-
-		if err != nil {
-			w.WriteHeader(400)
-			return
-		}
-
-		if strings.HasPrefix(rel, "..") {
-
-			w.WriteHeader(400)
-			return
-		}
-
-		err = os.RemoveAll(path)
-		if err != nil {
-			w.WriteHeader(500)
-			io.WriteString(w, filename)
-			return
-		}
-
-	
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte("Push error"))
+		return
 	}
 
 }
@@ -268,6 +211,33 @@ func RenameHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = UpdateIndex(_f, true)
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte("Update index error"))
+		return
+	}
+
+	err = UpdateIndex(_n, false)
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte("Update index error"))
+		return
+	}
+
+	err = commitAndPush(repo, fmt.Sprintf("Renamed %s to %s. T=%s", _n, _f, time.Now().String()))
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte("Push error"))
+		return
+	}
+
 }
 
 func CreateFile(path string) (*os.File, error) {
@@ -276,81 +246,4 @@ func CreateFile(path string) (*os.File, error) {
 	}
 
 	return os.Create(path)
-}
-
-func UploadMultipleHandle(w http.ResponseWriter, r *http.Request) {
-
-	if r.Method != "POST" {
-		w.WriteHeader(405)
-		return
-	}
-
-	if !checkAdmin(w, r) {
-		w.WriteHeader(403)
-		return
-	}
-
-	dir := r.URL.Query().Get("dir")
-
-	dir = strings.TrimLeft(dir, "/")
-	dir = strings.Trim(dir, "/")
-
-	err := r.ParseMultipartForm(int64(config.AppConf.UploadLimit))
-	if err != nil {
-		w.WriteHeader(500)
-		io.WriteString(w, "Parse form error:"+err.Error())
-		return
-	}
-	files := r.MultipartForm.File["files"]
-
-	for _, file := range files {
-		f, err := file.Open()
-
-		if err != nil {
-			w.WriteHeader(500)
-			io.WriteString(w, "00 Couldn't load file:"+file.Filename)
-			return
-		}
-
-		defer f.Close()
-
-		fullDir := filepath.Join(config.AppConf.ExposingDir, dir)
-
-		_, err = filepath.Rel(config.AppConf.ExposingDir, fullDir)
-		if err != nil {
-			w.WriteHeader(400)
-			return
-		}
-
-
-		fullName := filepath.Join(fullDir, file.Filename)
-
-		err = os.MkdirAll(fullDir, os.ModePerm)
-
-		if err != nil {
-			w.WriteHeader(500)
-			io.WriteString(w, "03 Couldn't load file:"+file.Filename)
-			return
-		}
-
-		newFile, err := os.Create(fullName)
-
-		if err != nil {
-			w.WriteHeader(500)
-			io.WriteString(w, "01 Couldn't load file:"+file.Filename)
-			return
-		}
-
-		_, err = io.Copy(newFile, f)
-
-		defer newFile.Close()
-
-		if err != nil {
-			w.WriteHeader(500)
-			io.WriteString(w, "02 Couldn't load file:"+file.Filename)
-			return
-		}
-
-
-	}
 }

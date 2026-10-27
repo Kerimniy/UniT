@@ -4,13 +4,20 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"sync"
 
 	"github.com/joho/godotenv"
 )
 
+type IndexStruct struct {
+	Mu  sync.RWMutex
+	Set map[string]bool
+}
+
 type Config struct {
-	UploadLimit       int
+	UploadLimit int
 	ExposingDir string
+	Index       IndexStruct
 }
 
 type AdminStruct struct {
@@ -29,7 +36,6 @@ func InitConf() {
 		panic(err)
 	}
 
-	
 	_upload_limit, err := strconv.Atoi(os.Getenv("UPLOAD_LIMIT"))
 
 	if err != nil {

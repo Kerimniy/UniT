@@ -40,7 +40,6 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	err := db.Db.Where("email= ?", email).First(&user).Error
 
-	fmt.Println("dd", email, user)
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		w.WriteHeader(401)

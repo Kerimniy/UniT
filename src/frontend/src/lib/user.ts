@@ -55,8 +55,8 @@ export async function sendRequest<T>(url: string, data: T): Promise<any> {
   });
 
   if (!response.ok) {
-    const errorText = await response.text().catch(() => "Ошибка сервера");
-    throw new Error(errorText || `Ошибка запроса: ${response.status}`);
+    const errorText = await response.text().catch(() => "Server error");
+    throw new Error(errorText || `Request error: ${response.status}`);
   }
 
   if (response.headers.get("content-type")?.includes("application/json")) {

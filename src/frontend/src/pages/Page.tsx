@@ -11,7 +11,7 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Home, List, Settings, RotateCcwClock, Plus, LogIn, LogOut } from "lucide-react"
+import { Home, List, Settings, RotateCcwClock, Plus, LogIn, LogOut, CheckCircle2, ShieldAlert } from "lucide-react"
 
 import { useNavigate } from "react-router-dom";
 import { BACKEND_BASE_URL } from "@/config";
@@ -26,6 +26,7 @@ import EditorPage  from "@/pages/Editor"
 import IndexPage from "./IndexPage";
 import AuthPage from "./AuthPage";
 import { authService } from "@/lib/user";
+import { useState } from "react";
 const items = [
     { title: "Home", url: "/", icon: Home },
     { title: "Index", url: "/-/index", icon: List },
@@ -92,12 +93,29 @@ function SignIn({
     return null;
 }
 
+export interface Message {
+    value: string
+    isError: boolean
+}
+
+export function setNewStatus(msg: string, isError: boolean, setStatus: React.Dispatch<React.SetStateAction<Message>>) {
+
+    let message: Message = { "value": msg, "isError": isError }
+
+    setStatus(message)
+
+    setTimeout(() => { setStatus(null) }, 5000)
+}
+
+
 export default function Page({ backendStatus }: { backendStatus: boolean }) {
 
     const navigate = useNavigate()
 
     const { user } = useAuth()
 
+    const [status, setStatus] = useState<Message | null>(null)
+    
 
     return (<div className="[--header-height:calc(--spacing(12))] w-full">
         <SidebarProvider className="flex flex-col">
@@ -108,7 +126,7 @@ export default function Page({ backendStatus }: { backendStatus: boolean }) {
                 </div>
                 <div className="flex flex-row gap-4 items-center">
                     <ThemeToggle></ThemeToggle>
-                    <ContextMenu></ContextMenu>
+                    <ContextMenu setStatus={setStatus}></ContextMenu>
                     <SignIn status={backendStatus} user={user} navigate={navigate} ></SignIn>
 
                 </div>
@@ -116,6 +134,14 @@ export default function Page({ backendStatus }: { backendStatus: boolean }) {
             <div className="flex flex-1 w-full">
                 <AppSidebar />
                 <SidebarInset className="min-w-0">
+                    {status !=null && (
+                        <div className={`p-3 rounded-lg text-sm flex gap-2 items-start ${status.isError == false ? "bg-emerald-500/10 text-emerald-500" : "bg-destructive/10 text-destructive"
+                            }`}>
+                            {status.isError == false ? <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" /> : <ShieldAlert className="w-4 h-4 mt-0.5 shrink-0" />}
+                            <span>{status.value}</span>
+                        </div>
+                    )}
+
                     <main className="w-full h-full text-left">
                         <Routes>
                             <Route path="/*" element={<Content></Content>}></Route>

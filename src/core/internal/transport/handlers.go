@@ -41,10 +41,8 @@ func ListenAndServeHTTP(ctx context.Context) {
 	mux.HandleFunc("/auth/me", services.GetUser)
 	mux.HandleFunc("/auth/code", services.RequestConfirmCode)
 
-	mux.HandleFunc("/manage/upload", services.UploadHandle)
-	mux.HandleFunc("/manage/upload-multiple", services.UploadMultipleHandle)
+	mux.HandleFunc("/manage/create", services.UploadHandle)
 	mux.HandleFunc("/manage/delete", services.DeleteHandle)
-	mux.HandleFunc("/manage/delete-all", services.DeleteAllHandle)
 	mux.HandleFunc("/manage/rename", services.RenameHandle)
 
 	mux.HandleFunc("/info/upload-limit", getUploadLimit)
@@ -99,8 +97,8 @@ func generate204(w http.ResponseWriter, r *http.Request) {
 
 func indexPage(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-        http.NotFound(w, r) 
-        return
-    }
+		http.NotFound(w, r)
+		return
+	}
 	http.Redirect(w, r, os.Getenv("FRONTEND"), 308)
 }
