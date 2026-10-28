@@ -30,7 +30,6 @@ import { useState } from "react";
 const items = [
     { title: "Home", url: "/", icon: Home },
     { title: "Index", url: "/-/index", icon: List },
-    { title: "History", url: "/-/history", icon: RotateCcwClock },
     { title: "Create", url: "/-/edit", icon: Plus },
     { title: "Settings", url: "/-/settings", icon: Settings },
 ]

@@ -59,8 +59,15 @@ export default function EditPage() {
     useEffect(() => {
         if (!pageParam) return;
 
+        let fileName = trimSlashes(pageParam)
+
+        if (fileName==""){
+            fileName="index"
+        }
+        console.log(fileName)
+
         setIsLoading(true);
-        fetch(`${REPO_BASE_URL}/${trimSlashes(pageParam)}`)
+        fetch(`${REPO_BASE_URL}/${fileName}`)
             .then((res) => {
                 if (res.status===404){
                     navigate("/-/edit")
@@ -79,10 +86,14 @@ export default function EditPage() {
 
         setIsSaving(true);
         try {
-            const response = await fetch(`${BACKEND_BASE_URL}/manage/create?file=${joinPath(pathname,filename)}`, {
+            let fileParam = joinPath(pathname, filename)
+            if (trimSlashes(fileParam)==""){
+                fileParam="index"
+            }
+            const response = await fetch(`${BACKEND_BASE_URL}/manage/create?file=${fileParam}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ newName: (pathname + filename), content: content }),
+                body: JSON.stringify({ newName: fileParam, content: content }),
                 credentials: "include"
             });
 

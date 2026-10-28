@@ -52,7 +52,6 @@ func InitGit() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(repo == nil, "SSSSSSSS")
 	return nil
 }
 

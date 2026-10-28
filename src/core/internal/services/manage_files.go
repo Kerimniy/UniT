@@ -28,7 +28,14 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 	filename := r.URL.Query().Get("file")
 	filename = strings.Trim(strings.TrimLeft(filename, "/"), "/")
 
+	if filename == "index.json" {
+		w.WriteHeader(400)
+		w.Write([]byte("index.json is internal file"))
+		return
+	}
+
 	if r.Method == "OPTIONS" {
+		w.WriteHeader(204)
 		return
 	}
 
@@ -50,12 +57,20 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if payload.NewName == "index.json" {
+		w.WriteHeader(400)
+		w.Write([]byte("index.json is internal file"))
+		return
+	}
+
 	path := filepath.Join(config.AppConf.RepoDir, filename)
 
 	rel, err := filepath.Rel(config.AppConf.RepoDir, path)
 
 	if err != nil {
 		fmt.Println(err)
+		w.Write([]byte("incorrect path"))
+
 		w.WriteHeader(400)
 		return
 	}
@@ -65,15 +80,19 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 	rel, err = filepath.Rel(config.AppConf.RepoDir, newPath)
 
 	if err != nil {
-		fmt.Println(err)
-
 		w.WriteHeader(400)
+
+		fmt.Println(err)
+		w.Write([]byte("incorrect path"))
+
 		return
 	}
 
 	if strings.HasPrefix(rel, "..") {
 
 		w.WriteHeader(400)
+		w.Write([]byte("incorrect path"))
+
 		return
 	}
 
@@ -81,7 +100,7 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println(err)
-
+		w.Write([]byte(fmt.Sprintf("Opening or creating file error: %s", err.Error())))
 		w.WriteHeader(500)
 		return
 	}
@@ -92,6 +111,8 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 
 		w.WriteHeader(500)
+		w.Write([]byte(fmt.Sprintf("Write data: %s", err.Error())))
+
 		return
 	}
 	file.Close()
@@ -103,6 +124,7 @@ func UploadHandle(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 
 			w.WriteHeader(500)
+			w.Write([]byte(fmt.Sprintf("Renaming error: %s", err.Error())))
 			return
 		}
 
@@ -144,12 +166,16 @@ func DeleteHandle(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(400)
+		w.Write([]byte("incorrect path"))
+
 		return
 	}
 
 	if strings.HasPrefix(rel, "..") {
 
 		w.WriteHeader(400)
+		w.Write([]byte("incorrect path"))
+
 		return
 	}
 
@@ -157,6 +183,8 @@ func DeleteHandle(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(500)
+		w.Write([]byte(fmt.Sprintf("Deleting error: %s", err.Error())))
+
 		return
 	}
 
@@ -202,8 +230,6 @@ func RenameHandle(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "Rename error: "+err.Error())
 		return
 	}
-
-
 
 	err = UpdateIndex(_f, true)
 
