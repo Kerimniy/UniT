@@ -126,7 +126,7 @@ export default function Page({ backendStatus }: { backendStatus: boolean }) {
                 </div>
                 <div className="flex flex-row gap-4 items-center">
                     <ThemeToggle></ThemeToggle>
-                    <ContextMenu setStatus={setStatus}></ContextMenu>
+                    <ContextMenu setStatus={setStatus} backendStatus={backendStatus}></ContextMenu>
                     <SignIn status={backendStatus} user={user} navigate={navigate} ></SignIn>
 
                 </div>
