@@ -1,16 +1,31 @@
+import { MarkdownRenderer } from "@/components/MarkdownRenderer"
 import { Spinner } from "@/components/ui/spinner"
 import { REPO_BASE_URL } from "@/config"
-import { useEffect, useState } from "react"
-import Markdown from "react-markdown"
+import { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router-dom"
-import rehypeRaw from "rehype-raw"
+import type { IndexElement } from "./Page"
+import { OpenImage } from "@/components/Image"
 
 
-export default function Content() {
+const scrollToHeader = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    })
+}
+
+
+export default function Content({ setPageIndex, setActiveId }: { setPageIndex: React.Dispatch<React.SetStateAction<IndexElement[]>>, setActiveId: React.Dispatch<React.SetStateAction<string>> }) {
     const location = useLocation()
 
     const [content, setContent] = useState("")
     const [loading, setLoading] = useState(true)
+
+    const [isOpenImage, setIsOpenImage]= useState(false)
+    const [imageSrc, setImageSrc]= useState("")
+
+    const rendererRef = useRef(null)
+
 
     useEffect(() => {
 
@@ -20,7 +35,14 @@ export default function Content() {
         }
         try {
             setLoading(true)
-            fetch(`${REPO_BASE_URL}/${path}`).then((resp) => {
+
+            let fetchPath = `${REPO_BASE_URL}/${path}`
+
+            if (path.startsWith("/-/docs/")){
+                fetchPath = `/public/pages/${path.substring(8,path.length)}.md`
+            }
+
+            fetch(fetchPath).then((resp) => {
                 if (resp.ok) {
                     return resp.text()
                 } else if (resp.status == 404) {
@@ -40,20 +62,99 @@ export default function Content() {
 
     }, [location.pathname])
 
+    useEffect(() => {
+        let contentDOM = rendererRef.current
+        if (contentDOM==undefined){
+            return
+        }
+        let headers = contentDOM.querySelectorAll("h1, h2, h3, h4, h5, h6")
+        let index: IndexElement[] = []
+        let c =0
+
+        let container = rendererRef.current
+
+        for (let el of headers){
+            el.id = `${el.textContent}-${(c).toString(36)}`
+            index.push(
+                {
+                    "title": el.textContent,
+                    "type": el.tagName.toLowerCase(),
+                    "id": el.id,
+                    "y": el.getBoundingClientRect().top
+                        - container.getBoundingClientRect().top
+                        + container.scrollTop
+                }
+            )
+            c++
+        }
+
+        const onScroll = () => {
+
+            console.log("QWWWWWWWWWQQQQ")
+
+            const y = container.scrollTop + 30
+
+            let left = 0
+            let right = index.length - 1
+            let result = 0
+
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2)
+
+                if (index[mid].y <= y) {
+                    result = mid
+                    left = mid + 1
+                } else {
+                    right = mid - 1
+                }
+            }
+
+            if (index.length > 0) {
+                setActiveId(index[result].id)
+            }
+        }
+
+        
+        container.addEventListener("scroll", onScroll, { passive: true })
+        onScroll()
+
+        
+
+        let images = contentDOM.querySelectorAll("img")
+
+        for (let image of images){
+            image.addEventListener('click', function () {
+                setIsOpenImage(true)
+                setImageSrc(image.src)
+            });
+        }
+        setPageIndex(index)
+    
+        return () => {
+            container.removeEventListener("scroll", onScroll)
+        }
+
+    }, [content]);
+
+    useEffect(() => {
+        let hash = window.location.hash;
+        hash = hash.substring(1, hash.length)
+
+        scrollToHeader(decodeURI(hash))
+    }, [window.location.hash, content])
 
     return (
-        <div className="p-4 w-full h-full">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+            <OpenImage src={imageSrc} setIsOpen={setIsOpenImage} isOpen={isOpenImage}></OpenImage>
             {loading ?
-                <div className="flex flex-col items-center justify-center w-full h-full">
+                <div className="flex flex-col items-center justify-center w-full h-full p-4">
                     <div className="max-w-[4rem] w-full aspect-square">
                         <Spinner className="w-full h-full"></Spinner>
                     </div>
                     <div className="text-xl p-4">Loading...</div>
                 </div> :
-                <Markdown rehypePlugins={[rehypeRaw]}>
-                    {content}
-                </Markdown>}
-
+                <MarkdownRenderer ref={rendererRef} content={content} />
+            }
         </div>
     )
 

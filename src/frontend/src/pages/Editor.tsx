@@ -8,10 +8,11 @@ import { BACKEND_BASE_URL, REPO_BASE_URL } from "@/config";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Save, Search, Replace, FileCode2, Loader2 } from "lucide-react";
+import { Save, Search, Replace, FileCode2, Loader2, SquareText, Code, CodeXml } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/components/Auth";
 import { joinPath, trimSlashes } from "@/lib/utils";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 
 
@@ -40,6 +41,8 @@ export default function EditPage() {
     const [isLoading, setIsLoading] = useState(false);
 
 
+    const [isPreview, setIsPreview] = useState(false)
+
 
     const handleEditorDidMount: OnMount = (editor, monaco) => {
         editorRef.current = editor;
@@ -61,15 +64,14 @@ export default function EditPage() {
 
         let fileName = trimSlashes(pageParam)
 
-        if (fileName==""){
-            fileName="index"
+        if (fileName == "") {
+            fileName = "index"
         }
-        console.log(fileName)
 
         setIsLoading(true);
         fetch(`${REPO_BASE_URL}/${fileName}`)
             .then((res) => {
-                if (res.status===404){
+                if (res.status === 404) {
                     navigate("/-/edit")
                 }
                 if (res.ok) return res.text();
@@ -87,8 +89,8 @@ export default function EditPage() {
         setIsSaving(true);
         try {
             let fileParam = joinPath(pathname, filename)
-            if (trimSlashes(fileParam)==""){
-                fileParam="index"
+            if (trimSlashes(fileParam) == "") {
+                fileParam = "index"
             }
             const response = await fetch(`${BACKEND_BASE_URL}/manage/create?file=${fileParam}`, {
                 method: "POST",
@@ -122,12 +124,11 @@ export default function EditPage() {
 
     return (
 
-        <div className="flex flex-col min-h-[500px] border shadow-sm overflow-hidden bg-background">
+        <div className="flex flex-col h-full border shadow-sm overflow-hidden bg-background">
 
             <div className="flex flex-col sm:flex-row items-center justify-between p-2 gap-2 border-b bg-muted/40">
 
                 <div className="flex items-center gap-2 sm:w-auto flex-1">
-                    <SidebarTrigger className="ml-1 text-muted-foreground" />
                     <FileCode2 className="hidden sm:block w-4 h-4 text-muted-foreground ml-1" />
                     <div className="h-8 flex flex-row items-center">{pathname}</div>
                     <Input
@@ -139,6 +140,12 @@ export default function EditPage() {
                 </div>
 
                 <div className="flex items-center justify-end gap-1.5 w-full sm:w-auto">
+
+                    <Button variant="outline" size="sm" className="h-8 px-2 sm:px-3" onClick={()=>setIsPreview(!isPreview)}>
+                        {!isPreview ? <SquareText /> : <CodeXml />}
+                        <span className="hidden sm:inline">{isPreview ? "Editor" : "Preview"}</span>
+                    </Button>
+
                     <Button variant="outline" size="sm" onClick={handleSearch} className="h-8 px-2 sm:px-3" title="Search (Ctrl+F)">
                         <Search className="w-4 h-4 sm:mr-2" />
                         <span className="hidden sm:inline">Search</span>
@@ -163,23 +170,27 @@ export default function EditPage() {
             </div>
 
             <div className="flex-grow relative">
-                <Editor
-                    onMount={handleEditorDidMount}
-                    height="100vh"
-                    width="auto"
-                    language={"markdown"}
-                    theme={resolvedTheme === "dark" ? "vs-dark" : "light"}
-                    value={content}
-                    onChange={(value) => setContent(value || "")}
-                    options={{
-                        minimap: { enabled: false },
-                        fontSize: 14,
-                        wordWrap: "on",
-                        scrollBeyondLastLine: false,
-                        automaticLayout: true,
-                        padding: { top: 12, bottom: 12 }
-                    }}
-                />
+                {!isPreview ?
+                    <Editor
+                        onMount={handleEditorDidMount}
+                        height="100%"
+                        width="auto"
+                        language={"markdown"}
+                        theme={resolvedTheme === "dark" ? "vs-dark" : "light"}
+                        value={content}
+                        onChange={(value) => setContent(value || "")}
+                        options={{
+                            minimap: { enabled: false },
+                            fontSize: 14,
+                            wordWrap: "on",
+                            scrollBeyondLastLine: false,
+                            automaticLayout: true,
+                            padding: { top: 12, bottom: 12 }
+                        }}
+                    /> :
+                    <div className="p-4">
+                    <MarkdownRenderer content={content} ref={null}></MarkdownRenderer></div>
+                }
             </div>
         </div>
 

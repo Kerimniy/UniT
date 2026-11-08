@@ -18,6 +18,7 @@ import { deleteRequest, renameRequest } from "@/lib/manage";
 import { Input } from "./ui/input";
 import { useState } from "react";
 import { setNewStatus, type Message } from "@/pages/Page";
+import { useAuth } from "./Auth";
 
 
 
@@ -32,6 +33,7 @@ export function ContextMenu({ setStatus, backendStatus }: { setStatus: React.Dis
 
     const isInternalPage = location.pathname.startsWith("/-/")
 
+    let {user} = useAuth()
 
     return (
         <Popover>
@@ -46,7 +48,7 @@ export function ContextMenu({ setStatus, backendStatus }: { setStatus: React.Dis
                 </Button>
 
 
-                {(!isInternalPage && backendStatus) &&
+                {(!isInternalPage && backendStatus && user!=null) &&
                     <AlertDialog>
                         <AlertDialogTrigger render={
                             <Button variant="ghost" className={"flex flex-row gap-3 justify-start"}>
@@ -70,7 +72,7 @@ export function ContextMenu({ setStatus, backendStatus }: { setStatus: React.Dis
                         </AlertDialogContent>
                     </AlertDialog>
                 }
-                {(!isInternalPage && backendStatus) &&
+                {(!isInternalPage && backendStatus && user != null) &&
                     <AlertDialog open={openRename}>
 
                         <AlertDialogTrigger onClick={() => { setOpenRename(!openRename); setNewName(location.pathname) }} render={
@@ -94,7 +96,7 @@ export function ContextMenu({ setStatus, backendStatus }: { setStatus: React.Dis
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel disabled={isRenaming}>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel onClick={()=>setOpenRename(false)} disabled={isRenaming}>Cancel</AlertDialogCancel>
                                 <Button variant="default" onClick={async () => {
                                     setIsRenaming(true)
                                     let res = await renameRequest(location.pathname, newName)
@@ -120,12 +122,12 @@ export function ContextMenu({ setStatus, backendStatus }: { setStatus: React.Dis
                     </AlertDialog>
                 }
 
-                {backendStatus &&
+                {backendStatus && user != null &&
                     <Button variant="ghost" className={"flex flex-row gap-3 justify-start"} key={"copy"} onClick={() => navigate(`/-/edit`)}>
                         <Plus />
                         <span>{"Create"}</span>
                     </Button>}
-                {(!isInternalPage && backendStatus) &&
+                {(!isInternalPage && user != null && backendStatus) &&
                     <Button variant="ghost" className={"flex flex-row gap-3 justify-start"} key={"copy"} onClick={() => navigate(`/-/edit?page=${location.pathname}`)}>
                         <FilePen />
                         <span>{"Edit"}</span>
