@@ -27,14 +27,8 @@ import IndexPage from "./IndexPage";
 import AuthPage from "./AuthPage";
 import { authService } from "@/lib/user";
 import { useEffect, useState } from "react";
+import { useToc } from "@/lib/toc-store";
 
-
-export interface IndexElement {
-    title: string
-    id: string
-    type: string
-    y: Number
-}
 
 export interface Message {
     value: string
@@ -47,8 +41,24 @@ const docsPages: { name: string, location: string, icon: LucideIcon }[] = [
     { name: "Guide", location: "/-/docs/guide", icon: BookA },
 ]
 
+function TocSection() {
+  const { items, activeId } = useToc()
+  if (items.length === 0) return null
+  return (
+    <SidebarGroup className="flex-start text-left">
+      <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+      <SidebarGroupContent className="ml-3">
+        {items.map(el => (
+          <div key={el.id}>
+            <Link className={`index-el index-${el.type} ${activeId === el.id ? "text-primary font-bold" : ""}`} to={`#${el.id}`}>{el.title}</Link>
+          </div>
+        ))}
+      </SidebarGroupContent>
+    </SidebarGroup>
+  )
+}
 
-function AppSidebar({ pageIndex, user, backendStatus, activeId }: { pageIndex: IndexElement[], user: UserStruct, backendStatus: boolean, activeId: string }) {
+function AppSidebar({user, backendStatus }: {user: UserStruct, backendStatus: boolean }) {
     const location = useLocation()
     return (
         <Sidebar className="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
@@ -111,20 +121,8 @@ function AppSidebar({ pageIndex, user, backendStatus, activeId }: { pageIndex: I
                     </SidebarGroup>
                 }
 
-                {pageIndex !== undefined && pageIndex.length > 0 &&
-                    <SidebarGroup className="flex-start text-left">
-                        <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-                        <SidebarGroupContent className="ml-3">
-                            {
-                                pageIndex.map(el => {
-                                    return <div key={el.id}>
-                                        <Link className={`index-el index-${el.type} ${activeId === el.id ? "text-primary font-bold" : ""}`} to={`#${el.id}`}>{el.title}</Link>
-                                    </div>
-                                })
-                            }
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                }
+                <TocSection />
+                
 
                 <SidebarGroup className="h-full flex justify-end">
                     <Link to="/-/docs/about" className="flex flex-col w-full justify-center items-center">
@@ -187,10 +185,8 @@ export default function Page({ backendStatus }: { backendStatus: boolean }) {
     const { user } = useAuth()
 
     const [status, setStatus] = useState<Message | null>(null)
-    const [pageIndex, setPageIndex] = useState<IndexElement[]>([])
 
 
-    const [activeId, setActiveId] = useState("")
 
 
     return (<div className="[--header-height:calc(--spacing(12))] w-full">
@@ -211,7 +207,7 @@ export default function Page({ backendStatus }: { backendStatus: boolean }) {
                 </div>
             </header>
             <div className="flex min-h-0 w-full flex-1 overflow-hidden">
-                <AppSidebar activeId={activeId} user={user} backendStatus={backendStatus} pageIndex={pageIndex} />
+                <AppSidebar user={user} backendStatus={backendStatus} />
                 <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
                     {status != null && (
                         <div className={`p-3 rounded-lg text-sm flex gap-2 items-start ${status.isError == false ? "bg-emerald-500/10 text-emerald-500" : "bg-destructive/10 text-destructive"
@@ -223,7 +219,7 @@ export default function Page({ backendStatus }: { backendStatus: boolean }) {
 
                     <main className="flex min-h-0 min-w-0 flex-1 flex-col">
                         <Routes>
-                            <Route path="/*" element={<Content setPageIndex={setPageIndex} setActiveId={setActiveId}></Content>}></Route>
+                            <Route path="/*" element={<Content />}></Route>
                             <Route path="/-/settings" element={<RequireAuth><AccountPage></AccountPage></RequireAuth>}></Route>
                             <Route path="/-/edit" element={<RequireAuth><EditorPage></EditorPage></RequireAuth>}></Route>
                             <Route path="/-/index" element={<IndexPage></IndexPage>}></Route>

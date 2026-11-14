@@ -16,18 +16,18 @@ export default function App() {
   const location = useLocation()
 
   useEffect(() => {
-
-
     let pathElements = location.pathname.split("/")
 
-    if (pathElements.length > 1 && pathElements[pathElements.length - 1]!=""){
+    if (pathElements.length > 1 && pathElements[pathElements.length - 1] != "") {
       document.title = `${pathElements[pathElements.length - 1]} — ${PAGE_TITLE}`
-    } else{
+    } else {
       document.title = `Home — ${PAGE_TITLE}`
 
     }
 
+  }, [location.pathname])
 
+  useEffect(() => {
 
     try {
       fetch(`${BACKEND_BASE_URL}/api/generate-204`).then((res) => {

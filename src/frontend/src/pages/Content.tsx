@@ -3,8 +3,8 @@ import { Spinner } from "@/components/ui/spinner"
 import { REPO_BASE_URL } from "@/config"
 import { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router-dom"
-import type { IndexElement } from "./Page"
 import { OpenImage } from "@/components/Image"
+import { tocStore, type IndexElement } from "@/lib/toc-store"
 
 
 const scrollToHeader = (id: string) => {
@@ -15,14 +15,14 @@ const scrollToHeader = (id: string) => {
 }
 
 
-export default function Content({ setPageIndex, setActiveId }: { setPageIndex: React.Dispatch<React.SetStateAction<IndexElement[]>>, setActiveId: React.Dispatch<React.SetStateAction<string>> }) {
+export default function Content() {
     const location = useLocation()
 
     const [content, setContent] = useState("")
     const [loading, setLoading] = useState(true)
 
-    const [isOpenImage, setIsOpenImage]= useState(false)
-    const [imageSrc, setImageSrc]= useState("")
+    const [isOpenImage, setIsOpenImage] = useState(false)
+    const [imageSrc, setImageSrc] = useState("")
 
     const rendererRef = useRef(null)
 
@@ -38,8 +38,8 @@ export default function Content({ setPageIndex, setActiveId }: { setPageIndex: R
 
             let fetchPath = `${REPO_BASE_URL}/${path}`
 
-            if (path.startsWith("/-/docs/")){
-                fetchPath = `/public/pages/${path.substring(8,path.length)}.md`
+            if (path.startsWith("/-/docs/")) {
+                fetchPath = `/public/pages/${path.substring(8, path.length)}.md`
             }
 
             fetch(fetchPath).then((resp) => {
@@ -64,16 +64,16 @@ export default function Content({ setPageIndex, setActiveId }: { setPageIndex: R
 
     useEffect(() => {
         let contentDOM = rendererRef.current
-        if (contentDOM==undefined){
+        if (contentDOM == undefined) {
             return
         }
         let headers = contentDOM.querySelectorAll("h1, h2, h3, h4, h5, h6")
         let index: IndexElement[] = []
-        let c =0
+        let c = 0
 
         let container = rendererRef.current
 
-        for (let el of headers){
+        for (let el of headers) {
             el.id = `${el.textContent}-${(c).toString(36)}`
             index.push(
                 {
@@ -87,10 +87,9 @@ export default function Content({ setPageIndex, setActiveId }: { setPageIndex: R
             )
             c++
         }
-
+        tocStore.set({ items: index })
         const onScroll = () => {
 
-            console.log("QWWWWWWWWWQQQQ")
 
             const y = container.scrollTop + 30
 
@@ -110,26 +109,26 @@ export default function Content({ setPageIndex, setActiveId }: { setPageIndex: R
             }
 
             if (index.length > 0) {
-                setActiveId(index[result].id)
+                tocStore.set({ activeId: index[result].id })
             }
+            
         }
 
-        
+
         container.addEventListener("scroll", onScroll, { passive: true })
         onScroll()
 
-        
+
 
         let images = contentDOM.querySelectorAll("img")
 
-        for (let image of images){
+        for (let image of images) {
             image.addEventListener('click', function () {
                 setIsOpenImage(true)
                 setImageSrc(image.src)
             });
         }
-        setPageIndex(index)
-    
+
         return () => {
             container.removeEventListener("scroll", onScroll)
         }

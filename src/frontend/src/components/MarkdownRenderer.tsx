@@ -14,39 +14,34 @@ import "highlight.js/styles/github-dark.css";
 import "@/markdown.css";
 import rust from "highlight.js/lib/languages/rust";
 import { common } from "lowlight";
+import { memo } from "react";
 
 const languages = {
     ...common,
     rust,
 };
 
-interface MarkdownRendererProps {
+interface Props {
     content: string;
     ref: React.RefObject<any>
 }
 
 
-
-export function MarkdownRenderer({
-    content, ref
-}: MarkdownRendererProps) {
+export const MarkdownRenderer = memo(function MarkdownRenderer({ content, ref }: Props) {
     return (
         <article ref={ref} className="markdown-body min-h-0 min-w-0 flex-1 overflow-y-auto text-left p-4">
-            <ReactMarkdown 
-                remarkPlugins={[
-                    remarkGfm,
-                    remarkGithubAlerts,
-                    remarkMath,
-                ]}
+            <ReactMarkdown remarkPlugins={[
+                remarkGfm,
+                remarkGithubAlerts,
+                remarkMath,
+            ]}
                 rehypePlugins={[
                     [rehypeHighlight, { languages }],
                     rehypeKatex,
                     rehypeRaw,
-                    
+
                 ]}
-            >
-                {content}
-            </ReactMarkdown>
+            >{content}</ReactMarkdown>
         </article>
-    );
-}
+    )
+})
