@@ -1,16 +1,15 @@
+import "@/lib/monaco-setup"
 import { Editor, type OnMount } from "@monaco-editor/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
 import type * as Monaco from "monaco-editor";
-import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { BACKEND_BASE_URL, REPO_BASE_URL } from "@/config";
 
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Save, Search, Replace, FileCode2, Loader2, SquareText, Code, CodeXml } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useAuth } from "@/components/Auth";
+import { Save, Search, Replace, FileCode2, Loader2, SquareText, CodeXml } from "lucide-react";
 import { joinPath, trimSlashes } from "@/lib/utils";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
@@ -20,10 +19,9 @@ import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 export default function EditPage() {
     const { resolvedTheme } = useTheme();
     const [searchParams, setSearchParams] = useSearchParams();
-    const location = useLocation()
     const navigate = useNavigate()
 
-    const [pageParam, setPageParam] = useState(searchParams.get("page") || "");
+    const [pageParam] = useState(searchParams.get("page") || "");
 
     const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
     const monacoRef = useRef<typeof Monaco | null>(null);
@@ -33,7 +31,7 @@ export default function EditPage() {
 
     const [content, setContent] = useState("");
     const [filename, setFilename] = useState(_[_.length - 1] || "");
-    const [pathname, setPathname] = useState(_.slice(0, _.length - 1).join("/") + "/" || "");
+    const [pathname] = useState(_.slice(0, _.length - 1).join("/") + "/" || "");
 
 
 

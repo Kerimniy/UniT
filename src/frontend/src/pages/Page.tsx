@@ -11,10 +11,10 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Home, List, Settings, RotateCcwClock, Plus, LogIn, LogOut, CheckCircle2, ShieldAlert, Info, type LucideIcon, BookText, BookA } from "lucide-react"
+import { Home, List, Plus, LogIn, LogOut, CheckCircle2, ShieldAlert, Info, type LucideIcon, BookText, BookA } from "lucide-react"
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BACKEND_BASE_URL, HEADER_ICON_PATH, PAGE_TITLE, SIDEBAR_ICON_PATH } from "@/config";
+import { HEADER_ICON_PATH, PAGE_TITLE, SIDEBAR_ICON_PATH } from "@/config";
 import { ContextMenu } from "@/components/ContextMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ import EditorPage from "@/pages/Editor"
 import IndexPage from "./IndexPage";
 import AuthPage from "./AuthPage";
 import { authService } from "@/lib/user";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useToc } from "@/lib/toc-store";
 
 

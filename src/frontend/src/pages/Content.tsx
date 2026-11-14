@@ -29,38 +29,35 @@ export default function Content() {
 
     useEffect(() => {
 
+        const ctrl = new AbortController()
+
         let path = location.pathname
         if (path.replace(/\/$/, "") == "") {
             path = "index"
         }
-        try {
-            setLoading(true)
 
-            let fetchPath = `${REPO_BASE_URL}/${path}`
+        setLoading(true)
 
-            if (path.startsWith("/-/docs/")) {
-                fetchPath = `/public/pages/${path.substring(8, path.length)}.md`
-            }
+        let fetchPath = `${REPO_BASE_URL}/${path}`
 
-            fetch(fetchPath).then((resp) => {
-                if (resp.ok) {
-                    return resp.text()
-                } else if (resp.status == 404) {
-                    return "404 dummy" //потом сделать норм 404
-                } else {
-                    setLoading(false)
-
-                }
-            }).then((src) => {
-                setContent(src)
-                setLoading(false)
-
-            })
-        } catch (error) {
-            setLoading(false)
-            setContent("Unexpected error!")
+        if (path.startsWith("/-/docs/")) {
+            fetchPath = `/public/pages/${path.substring(8, path.length)}.md`
         }
+        ; (async () => {
+            try {
+                const resp = await fetch(fetchPath, { signal: ctrl.signal })
+                if (resp.ok) setContent(await resp.text())
+                else if (resp.status === 404) setContent("404 dummy")
+                else setContent(`Error ${resp.status}`)
+            } catch (e) {
+                if (e instanceof DOMException && e.name === "AbortError") return 
+                setContent("Unexpected error!")                                  
+            } finally {
+                if (!ctrl.signal.aborted) setLoading(false)
+            }
+        })()
 
+        return () => ctrl.abort()
     }, [location.pathname])
 
     useEffect(() => {
@@ -112,7 +109,7 @@ export default function Content() {
             if (index.length > 0) {
                 tocStore.set({ activeId: index[result].id })
             }
-            
+
         }
 
 

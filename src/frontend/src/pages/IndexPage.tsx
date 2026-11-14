@@ -4,12 +4,9 @@ import { REPO_BASE_URL } from "@/config"
 import { useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 
-import { ChevronRight, File, Folder, Newspaper } from "lucide-react";
+import { ChevronRight, Folder, Newspaper } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
-interface Dictionary<T> {
-    [key: string]: T;
-}
 
 interface TreeNode {
     name: string;
@@ -27,7 +24,7 @@ function buildTree(
 ): AlphabetTree {
     const roots: TreeNode[] = [];
 
-    for (const [path, value] of Object.entries(files)) {
+    for (const [path] of Object.entries(files)) {
         const parts = path.split("/").filter(Boolean);
 
         if (parts.length === 0) continue;
@@ -94,36 +91,31 @@ export default function IndexPage() {
     const [loading, setLoading] = useState(true)
 
 
-
-
-
     useEffect(() => {
-
-        try {
-            setLoading(true)
-            fetch(`${REPO_BASE_URL}/index.json`).then((resp) => {
-                if (resp.ok) {
-                    return resp.json()
-                } else if (resp.status == 404) {
-                    return "No pages (404)"
-                } else {
-                    setLoading(false)
-
+        const ctrl = new AbortController()
+        setLoading(true)
+            ; (async () => {
+                try {
+                    const resp = await fetch(`${REPO_BASE_URL}/index.json`, { signal: ctrl.signal })
+                    if (!resp.ok && resp.status !== 404) throw new Error(`HTTP ${resp.status}`)
+                    else if (resp.status == 404) {
+                        setContent({"":[{name: "No Index for now", path:'',children:[]}]})
+                    }
+                    else {
+                        setContent(buildTree(resp.ok ? await resp.json() : {}))
+                    }
+                } catch (e) {
+                    if (e instanceof DOMException && e.name === "AbortError") return
+                    setContent({})
+                } finally {
+                    if (!ctrl.signal.aborted) setLoading(false)
                 }
-            }).then((src) => {
-
-                let tree = buildTree(src)
-                setContent(tree)
-                setLoading(false)
-
-            })
-        } catch (error) {
-            setContent(null)
-        }
-
+            })()
+        return () => ctrl.abort()
     }, [location.pathname])
 
 
+  
 
     return (
         <div className="p-4 w-full h-full">
