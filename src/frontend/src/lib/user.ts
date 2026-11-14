@@ -56,13 +56,13 @@ export async function sendRequest<T>(url: string, data: T): Promise<any> {
 
   if (!response.ok) {
     const errorText = await response.text().catch(() => "Server error");
-    throw new Error(errorText || `Request error: ${response.status}`);
+    return {"content":errorText, "ok":response.ok};
   }
 
   if (response.headers.get("content-type")?.includes("application/json")) {
-    return response.json();
+    return {"content":response.json(), "ok":response.ok};
   }
-  return response.text();
+  return {"content":response.text(), "ok":response.ok};
 }
 
 export const authService = {

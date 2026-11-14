@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "../components/ui/button";
 import {
@@ -35,7 +35,7 @@ export default function AccountPage() {
 
           <Card className="w-full p-4 ">
 
-            <div><Button onClick={() => { setIsLoading(true); authService.logout(() => setIsLoading(false)); updateUser(); navigate("/") }}>
+            <div><Button onClick={async () => { setIsLoading(true); await authService.logout(() => setIsLoading(false)); updateUser(); navigate("/") }}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 
               Log out
