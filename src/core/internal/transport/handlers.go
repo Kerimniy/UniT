@@ -30,6 +30,22 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+func requireOrigin(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet, http.MethodHead, http.MethodOptions:
+		default:
+			allowed := os.Getenv("FRONTEND")
+
+			if r.Header.Get("Origin") != allowed {
+				http.Error(w, "forbidden origin", http.StatusForbidden)
+				return
+			}
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
 func ListenAndServeHTTP(ctx context.Context) {
 	mux := http.NewServeMux()
 
@@ -44,7 +60,6 @@ func ListenAndServeHTTP(ctx context.Context) {
 	mux.HandleFunc("/manage/create", services.UploadHandle)
 	mux.HandleFunc("/manage/delete", services.DeleteHandle)
 	mux.HandleFunc("/manage/rename", services.RenameHandle)
-
 	mux.HandleFunc("/info/upload-limit", getUploadLimit)
 	mux.HandleFunc("/api/generate-204", generate204)
 
@@ -52,7 +67,7 @@ func ListenAndServeHTTP(ctx context.Context) {
 
 	srv := &http.Server{
 		Addr:    os.Getenv("HOST"),
-		Handler: corsMiddleware(mux),
+		Handler: corsMiddleware(requireOrigin(mux)),
 	}
 
 	go func() {
