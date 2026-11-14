@@ -57,6 +57,7 @@ export default function Content() {
 
             })
         } catch (error) {
+            setLoading(false)
             setContent("Unexpected error!")
         }
 

@@ -5,9 +5,9 @@ import { trimSlashes } from "./utils";
 export async function deleteRequest(file: string): Promise<any> {
 
 
-    const response = await fetch(`/manage/delete?file=${file}`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/manage/delete?file=${encodeURI(file)}`, {
         credentials: "include",
-        method: "GET",
+        method: "DELETE",
     });
 
     if (!response.ok) {
@@ -34,9 +34,9 @@ export async function renameRequest(file: string, newName: string): Promise<Mess
         newName="index"
     } 
 
-    const response = await fetch(`${BACKEND_BASE_URL}/manage/rename?file=${file}&name=${newName}`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/manage/rename?file=${encodeURI(file)}&name=${encodeURI(newName)}`, {
         credentials: "include",
-        method: "GET",
+        method: "POST",
     });
 
     let errorText = ""
