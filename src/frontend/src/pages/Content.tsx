@@ -55,10 +55,12 @@ export default function Content() {
                     setPageCache(location.pathname, page)
 
                 }
-                else if (resp.status === 404) setContent(`
-                    # 404 Page not fouund 
-                    ## Return to [Main page](/)
-                `)
+                else if (resp.status === 404) setContent(
+`
+# 404 Page not found
+### Return to [Main page](/)
+`
+)
                 else setContent(`Error ${resp.status}`)
             } catch (e) {
                 if (e instanceof DOMException && e.name === "AbortError") return
