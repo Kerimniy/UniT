@@ -87,12 +87,7 @@
     color: hsl(var(--muted-foreground));
 }
 
-.markdown-body :not(pre) {
-    background: var(--muted);
-    padding: 0.15em 0.4em;
-    border-radius: 5px;
-    font-size: 0.875em;
-}
+
 
 .markdown-body pre {
     overflow-x: auto;

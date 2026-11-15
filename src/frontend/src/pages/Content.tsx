@@ -149,7 +149,7 @@ export default function Content() {
         hash = hash.substring(1, hash.length)
 
         scrollToHeader(decodeURI(hash))
-    }, [content])
+    }, [content, window.location.hash])
 
     return (
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">

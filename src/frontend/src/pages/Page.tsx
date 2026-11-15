@@ -126,7 +126,7 @@ function AppSidebar({user, backendStatus }: {user: UserStruct | null, backendSta
 
                 <SidebarGroup className="h-full flex justify-end">
                     <Link to="/-/docs/about" className="flex flex-col w-full justify-center items-center">
-                        <img className="w-[150px]" src={SIDEBAR_ICON_PATH}></img>
+                        <img className="w-[150px] mb-3" src={SIDEBAR_ICON_PATH}></img>
                         <p style={{ "color": "var(--muted-foreground)" }}>About Vebvy</p>
                     </Link>
                 </SidebarGroup>
