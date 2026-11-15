@@ -1,6 +1,6 @@
 /*
 
-This code is borrowed from the Vebvy and UniT-v0.2.3 projects. BSD license.
+This code is borrowed from the Vebls and UniT-v0.2.3 projects. BSD license.
 
 */
 
