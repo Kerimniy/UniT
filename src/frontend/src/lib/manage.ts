@@ -1,6 +1,7 @@
 import { BACKEND_BASE_URL } from "@/config";
 import type { Message } from "@/pages/Page";
 import { trimSlashes } from "./utils";
+import { deletePageCache } from "./caching";
 
 export async function deleteRequest(file: string): Promise<any> {
 
@@ -15,10 +16,12 @@ export async function deleteRequest(file: string): Promise<any> {
         throw new Error(errorText || `Request error: ${response.status}`);
     }
 
+    deletePageCache(file)
+
     if (response.headers.get("content-type")?.includes("application/json")) {
-        return response.json();
+        return {"content":response.json(),"ok": response.ok};
     }
-    return response.text();
+    return {"content":response.text(),"ok": response.ok};
 }
 
 export async function renameRequest(file: string, newName: string): Promise<Message> {
@@ -46,6 +49,7 @@ export async function renameRequest(file: string, newName: string): Promise<Mess
         
     }
 
+    deletePageCache(file)
     
     return {"isError":!response.ok,"value":errorText};
 }

@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/Auth"
 import { useEffect, useState } from "react";
 import { BACKEND_BASE_URL, PAGE_TITLE } from "./config";
 import { useLocation } from "react-router-dom";
+import { cleanExpiredCache } from "./lib/caching";
 
 
 
@@ -28,6 +29,8 @@ export default function App() {
   }, [location.pathname])
 
   useEffect(() => {
+
+    cleanExpiredCache()
 
     try {
       fetch(`${BACKEND_BASE_URL}/api/generate-204`).then((res) => {

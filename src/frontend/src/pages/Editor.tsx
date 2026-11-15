@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Save, Search, Replace, FileCode2, Loader2, SquareText, CodeXml } from "lucide-react";
 import { joinPath, trimSlashes } from "@/lib/utils";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { deletePageCache } from "@/lib/caching";
 
 
 
@@ -98,6 +99,8 @@ export default function EditPage() {
             });
 
             if (!response.ok) throw new Error("Save failed");
+
+            deletePageCache(fileParam)
 
             console.log("Saved");
 

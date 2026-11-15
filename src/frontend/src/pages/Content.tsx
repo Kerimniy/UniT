@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { OpenImage } from "@/components/Image"
 import { tocStore, type IndexElement } from "@/lib/toc-store"
+import { getPageCache, setPageCache } from "@/lib/caching"
 
 
 const scrollToHeader = (id: string) => {
@@ -18,8 +19,10 @@ const scrollToHeader = (id: string) => {
 export default function Content() {
     const location = useLocation()
 
-    const [content, setContent] = useState("")
-    const [loading, setLoading] = useState(true)
+    const pageCache = getPageCache(location.pathname)
+
+    const [content, setContent] = useState(pageCache)
+    const [loading, setLoading] = useState(pageCache !=="" ? false : true)
 
     const [isOpenImage, setIsOpenImage] = useState(false)
     const [imageSrc, setImageSrc] = useState("")
@@ -36,7 +39,7 @@ export default function Content() {
             path = "index"
         }
 
-        setLoading(true)
+        setLoading(pageCache !=="" ? false : true)
 
         let fetchPath = `${REPO_BASE_URL}/${path}`
 
@@ -46,7 +49,12 @@ export default function Content() {
         ; (async () => {
             try {
                 const resp = await fetch(fetchPath, { signal: ctrl.signal })
-                if (resp.ok) setContent(await resp.text())
+                if (resp.ok) {
+                    const page = await resp.text()
+                    setContent(page)
+                    setPageCache(location.pathname, page)
+
+                }
                 else if (resp.status === 404) setContent("404 dummy")
                 else setContent(`Error ${resp.status}`)
             } catch (e) {
