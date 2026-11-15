@@ -22,7 +22,7 @@ export default function Content() {
     const pageCache = getPageCache(location.pathname)
 
     const [content, setContent] = useState(pageCache)
-    const [loading, setLoading] = useState(pageCache !=="" ? false : true)
+    const [loading, setLoading] = useState(pageCache !== "" ? false : true)
 
     const [isOpenImage, setIsOpenImage] = useState(false)
     const [imageSrc, setImageSrc] = useState("")
@@ -39,7 +39,7 @@ export default function Content() {
             path = "index"
         }
 
-        setLoading(pageCache !=="" ? false : true)
+        setLoading(pageCache !== "" ? false : true)
 
         let fetchPath = `${REPO_BASE_URL}/${path}`
 
@@ -55,11 +55,14 @@ export default function Content() {
                     setPageCache(location.pathname, page)
 
                 }
-                else if (resp.status === 404) setContent("404 dummy")
+                else if (resp.status === 404) setContent(`
+                    # 404 Page not fouund 
+                    ## Return to [Main page](/)
+                `)
                 else setContent(`Error ${resp.status}`)
             } catch (e) {
-                if (e instanceof DOMException && e.name === "AbortError") return 
-                setContent("Unexpected error!")                                  
+                if (e instanceof DOMException && e.name === "AbortError") return
+                setContent("Unexpected error!")
             } finally {
                 if (!ctrl.signal.aborted) setLoading(false)
             }
