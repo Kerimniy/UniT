@@ -1,3 +1,9 @@
+/*
+
+This code is borrowed from the Vebvy and UniT-v0.2.3 projects. BSD license.
+
+*/
+
 package main
 
 import (
@@ -34,17 +40,16 @@ func main() {
 	db.InitDb()
 	fmt.Println(time.Now(), "Initialized database ")
 
-	err:=services.InitGit()
-	if err!=nil{
-		log.Fatal("Git intitialization error: ",err)
+	err := services.InitGit()
+	if err != nil {
+		log.Fatal("Git intitialization error: ", err)
 		return
-	} else{
+	} else {
 		fmt.Println(time.Now(), "Initialized git service ")
 	}
 
 	tgbot.InitTGBot(ctx)
 	fmt.Println(time.Now(), "Initialized tg bot service ")
-
 
 	config.Admin = services.Admin_exist()
 	fmt.Println(time.Now(), "Initialized admin status")
