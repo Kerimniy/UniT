@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '@/components/Auth';
 
 export default function AccountPage() {
-  const { user, updateUser } = useAuth();
+  const { updateUser } = useAuth();
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
 

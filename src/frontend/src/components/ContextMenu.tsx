@@ -1,6 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
-import { Copy, Trash, Edit, EllipsisVertical, Paperclip, Plus, Pencil, Loader2, FilePen } from "lucide-react";
+import { Copy, Trash, EllipsisVertical, Plus, Pencil, Loader2, FilePen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -23,7 +23,7 @@ import { useAuth } from "./Auth";
 
 
 
-export function ContextMenu({ setStatus, backendStatus }: { setStatus: React.Dispatch<React.SetStateAction<Message>>, backendStatus: boolean }) {
+export function ContextMenu({ setStatus, backendStatus }: { setStatus: React.Dispatch<React.SetStateAction<Message | null>>, backendStatus: boolean }) {
     let navigate = useNavigate()
 
     let [newName, setNewName] = useState("")

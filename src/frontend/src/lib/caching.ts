@@ -24,7 +24,7 @@ export function cleanExpiredCache() {
         if (!key.startsWith("__cache__")){
             continue
         }
-        let item = JSON.parse(localStorage.getItem(key))
+        let item = JSON.parse(localStorage.getItem(key)!)
 
         if (item.exp<performance.now()){
             localStorage.removeItem(key)

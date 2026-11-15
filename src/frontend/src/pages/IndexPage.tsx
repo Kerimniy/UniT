@@ -31,7 +31,6 @@ function buildTree(
 
         let currentPath = "";
         let siblings = roots;
-        let current: TreeNode | undefined;
 
         for (let i = 0; i < parts.length; i++) {
             const name = parts[i];
@@ -50,7 +49,6 @@ function buildTree(
                 siblings.push(node);
             }
 
-            current = node;
             siblings = node.children;
         }
 
@@ -187,8 +185,11 @@ function TreeItem({ node }: { node: TreeNode }) {
 export function FileTree({
     content,
 }: {
-    content: AlphabetTree;
+    content: AlphabetTree | null | undefined ;
 }) {
+    if (content==null || content==undefined){
+        return <></>
+    }
     return (
         <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
             {Object.entries(content).map(([letter, nodes]) => (

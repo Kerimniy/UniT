@@ -22,8 +22,8 @@ const languages = {
 };
 
 interface Props {
-    content: string;
-    ref: React.RefObject<any>
+    content: string,
+    ref: React.RefObject<any> | null
 }
 
 

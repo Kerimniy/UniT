@@ -27,7 +27,7 @@ export default function Content() {
     const [isOpenImage, setIsOpenImage] = useState(false)
     const [imageSrc, setImageSrc] = useState("")
 
-    const rendererRef = useRef(null)
+    const rendererRef = useRef<HTMLDivElement | null>(null)
 
 
     useEffect(() => {
@@ -76,11 +76,11 @@ export default function Content() {
         if (contentDOM == undefined) {
             return
         }
-        let headers = contentDOM.querySelectorAll("h1, h2, h3, h4, h5, h6")
+        let headers = Array.from(contentDOM?.querySelectorAll("h1, h2, h3, h4, h5, h6") ?? [])
         let index: IndexElement[] = []
         let c = 0
 
-        let container = rendererRef.current
+        let container = rendererRef.current!
 
         for (let el of headers) {
             el.id = `${el.textContent}-${(c).toString(36)}`
@@ -90,8 +90,8 @@ export default function Content() {
                     "type": el.tagName.toLowerCase(),
                     "id": el.id,
                     "y": el.getBoundingClientRect().top
-                        - container.getBoundingClientRect().top
-                        + container.scrollTop
+                        - container?.getBoundingClientRect().top
+                        + container?.scrollTop
                 }
             )
             c++
@@ -100,7 +100,7 @@ export default function Content() {
         const onScroll = () => {
 
 
-            const y = container.scrollTop + 30
+            const y = container?.scrollTop + 30
 
             let left = 0
             let right = index.length - 1
@@ -124,12 +124,12 @@ export default function Content() {
         }
 
 
-        container.addEventListener("scroll", onScroll, { passive: true })
+        container?.addEventListener("scroll", onScroll, { passive: true })
         onScroll()
 
 
 
-        let images = contentDOM.querySelectorAll("img")
+        let images = Array.from(contentDOM?.querySelectorAll("img") ?? [])
 
         for (let image of images) {
             image.addEventListener('click', function () {
@@ -139,7 +139,7 @@ export default function Content() {
         }
 
         return () => {
-            container.removeEventListener("scroll", onScroll)
+            container?.removeEventListener("scroll", onScroll)
         }
 
     }, [content]);
@@ -149,7 +149,7 @@ export default function Content() {
         hash = hash.substring(1, hash.length)
 
         scrollToHeader(decodeURI(hash))
-    }, [window.location.hash, content])
+    }, [content])
 
     return (
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
@@ -161,7 +161,7 @@ export default function Content() {
                     </div>
                     <div className="text-xl p-4">Loading...</div>
                 </div> :
-                <MarkdownRenderer ref={rendererRef} content={content} />
+                <MarkdownRenderer ref={rendererRef} content={content||""} />
             }
         </div>
     )

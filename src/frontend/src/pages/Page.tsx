@@ -58,7 +58,7 @@ function TocSection() {
   )
 }
 
-function AppSidebar({user, backendStatus }: {user: UserStruct, backendStatus: boolean }) {
+function AppSidebar({user, backendStatus }: {user: UserStruct | null, backendStatus: boolean }) {
     const location = useLocation()
     return (
         <Sidebar className="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
@@ -168,7 +168,7 @@ function SignIn({
 }
 
 
-export function setNewStatus(msg: string, isError: boolean, setStatus: React.Dispatch<React.SetStateAction<Message>>) {
+export function setNewStatus(msg: string, isError: boolean, setStatus: React.Dispatch<React.SetStateAction<Message | null>>) {
 
     let message: Message = { "value": msg, "isError": isError }
 
