@@ -86,37 +86,6 @@ func pull(repo *git.Repository) error {
 	return nil
 }
 
-func UpdateIndex(path string, isDelete bool) error {
-	p := filepath.Join(config.AppConf.RepoDir, "index.json")
-	file, err := os.Create(p)
-
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	config.AppConf.Index.Mu.Lock()
-	if isDelete {
-		delete(config.AppConf.Index.Set, path)
-	} else {
-		config.AppConf.Index.Set[path] = true
-	}
-	config.AppConf.Index.Mu.Unlock()
-
-	b, err := json.Marshal(config.AppConf.Index.Set)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = file.Write(b)
-
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func loadIndex() error {
 	p := filepath.Join(config.AppConf.RepoDir, "index.json")
 	file, err := os.Open(p)
