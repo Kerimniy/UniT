@@ -85,6 +85,7 @@ func pull(repo *git.Repository) error {
 
 	return nil
 }
+
 func UpdateIndex(path string, isDelete bool) error {
 	p := filepath.Join(config.AppConf.RepoDir, "index.json")
 	file, err := os.Create(p)
